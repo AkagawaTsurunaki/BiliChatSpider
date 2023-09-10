@@ -7,6 +7,7 @@ def init_config():
     config_path = './config/chat_spider_config.json'
     if not os.path.exists(config_path):
         raise FileNotFoundError(f'Can not find configuration file in directory "{config_path}".')
+
     with open(file=config_path, encoding='utf-8', mode='r') as file:
         config = json.load(fp=file)
 
