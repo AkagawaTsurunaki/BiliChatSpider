@@ -1,2 +1,4 @@
 config
 dataset
+*.log
+*.bat
