@@ -11,10 +11,9 @@ class __History:
 
         if not os.path.exists(path):
             os.makedirs(path)
+        self.history = []
         with open(file=path, encoding='utf-8', mode='r') as file:
-            self.history = json.load(fp=file)
-        if self.history is None:
-            self.history = []
+            self.history = json.load(file)
 
     def is_job_completed(self, uid: str):
         for history_item in self.history:
@@ -51,7 +50,9 @@ class __History:
         self.__save_history()
 
     def __save_history(self):
-        with open(file=fr'{cfg.save_path}\history.json', encoding='utf-8', mode='r') as file:
+        with open(file=fr'{cfg.save_path}\history.json', encoding='utf-8', mode='w') as file:
+            if len(self.history) == 0:
+                self.history = []
             json.dump(fp=file, ensure_ascii=False, obj=self.history)
 
 

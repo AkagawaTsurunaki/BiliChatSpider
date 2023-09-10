@@ -4,8 +4,8 @@ from random import Random
 from retry import retry
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
-from history import HistoryManager
-from driver_initilizer import DriverInitializer
+from core.history_manager import HistoryManager
+from core.driver_initilizer import DriverInitializer
 
 
 class ProSpider:

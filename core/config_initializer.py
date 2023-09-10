@@ -8,17 +8,17 @@ def init_config_from_py():
     max_parallel_job_num = cfg.max_parallel_job_num
     if max_parallel_job_num > 36:
         logging.warning(
-            f'Argument "max_parallel_job_num" was set to {max_parallel_job_num} and this may cause your system crash.')
+            f'Argument "max_parallel_job_num" was set to {max_parallel_job_num} and self may cause your system crash.')
 
     sleep_time_before_job_launching = cfg.sleep_time_before_job_launching
     if sleep_time_before_job_launching > 60:
         logging.warning(
-            f'Argument "sleep_time_before_job_launching" was set to {sleep_time_before_job_launching} and this may cause long time waiting.')
+            f'Argument "sleep_time_before_job_launching" was set to {sleep_time_before_job_launching} and self may cause long time waiting.')
 
     sleep_time_after_job_launching = cfg.sleep_time_after_job_launching
     if sleep_time_after_job_launching > 60:
         logging.warning(
-            f'Argument "sleep_time_after_job_launching" was set to {sleep_time_after_job_launching} and this may cause long time waiting.')
+            f'Argument "sleep_time_after_job_launching" was set to {sleep_time_after_job_launching} and self may cause long time waiting.')
 
     save_path = cfg.save_path
     if not os.path.exists(save_path):

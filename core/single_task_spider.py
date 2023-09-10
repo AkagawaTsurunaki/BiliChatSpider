@@ -17,9 +17,9 @@ class SingleTaskSpider:
             return False
         return True
 
-    def __init__(self, driver: webdriver):
+    def __init__(self, driver):
         self.reply_record_list = []
-        self.driver: webdriver = driver
+        self.driver = driver
         self.implicitly_wait_second = 0.5
         self.window_scroll_count = 10
         self.window_scroll_by = 6000

@@ -3,7 +3,7 @@ import logging
 import time
 import schedule
 from core.pro_spider import ProSpider
-from core.multitask_spider import MultitaskSpider
+import core.multitask_spider
 from core.config_initializer import init_config_from_py
 
 
@@ -11,22 +11,24 @@ def run(args):
     init_config_from_py()
     logging.info('Custom configuration loaded.')
 
-    logging.info('🕐 Waiting for timer...')
-    schedule.every().day.at("00:01").do(job_func=__run, args=args)
+    if args.time.lower() != 'now':
+        logging.info('🕐 Waiting for timer...')
+        schedule.every().day.at().do(job_func=__run, args=args)
 
-    while True:
-        schedule.run_pending()
-        time.sleep(1)
+        while True:
+            schedule.run_pending()
+            time.sleep(1)
+
+    __run(args)
 
 
 def __run(args):
     for uid in args.list:
         ProSpider().update_job(uid=uid, force_create_job=args.force.lower() != 'n')
-        MultitaskSpider().run(uid=uid)
+        core.multitask_spider.run(uid=uid)
 
 
 if __name__ == '__main__':
-
     print('Bili Chat Spider')
 
     # Initialize arguments parser.
@@ -35,8 +37,8 @@ if __name__ == '__main__':
                                      epilog=''
                                      )
     parser.add_argument('-l', '--list', nargs='+', type=str)
-    parser.add_argument('-f', '--force', type=str, default=False)
-    parser.add_argument('-t', '--time', type=str, default="00:01")
+    parser.add_argument('-f', '--force', type=str, default='N')
+    parser.add_argument('-t', '--time', type=str, default='now')
 
     args = parser.parse_args()
 
