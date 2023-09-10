@@ -1,5 +1,6 @@
 import json
 import os
+from json import JSONDecodeError
 
 import config.chat_spider_config as cfg
 
@@ -12,20 +13,30 @@ class __History:
         if not os.path.exists(path):
             os.makedirs(path)
         self.history = []
-        with open(file=path, encoding='utf-8', mode='r') as file:
-            self.history = json.load(file)
+
+    def __load(self):
+        path = fr'{cfg.save_path}\history.json'
+        try:
+            with open(file=path, encoding='utf-8', mode='r') as file:
+                self.history = json.load(file)
+        except JSONDecodeError:
+            pass
 
     def is_job_completed(self, uid: str):
+        self.__load()
         for history_item in self.history:
             if history_item['uid'] == uid:
                 return history_item['is_job_completed']
 
     def get_uncompleted_tasks(self, uid: str):
+        self.__load()
         for history_item in self.history:
             if history_item['uid'] == uid:
                 return history_item['uncompleted_tasks']
+        return []
 
     def create_job(self, up_name, uid, uncompleted_tasks):
+        self.__load()
         job = {
             'up_name': up_name,
             'uid': uid,
@@ -37,6 +48,7 @@ class __History:
         self.__save_history()
 
     def single_task_completed(self, uid: str, bv: str):
+        self.__load()
         for history_item in self.history:
             if history_item['uid'] == uid:
                 # Remove bv from uncompleted_tasks
