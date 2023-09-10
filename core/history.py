@@ -4,16 +4,17 @@ import os
 import config.chat_spider_config as cfg
 
 
-class History:
+class __History:
 
     def __init__(self):
         path = fr'{cfg.save_path}\history.json'
 
         if not os.path.exists(path):
             os.makedirs(path)
-
         with open(file=path, encoding='utf-8', mode='r') as file:
             self.history = json.load(fp=file)
+        if self.history is None:
+            self.history = []
 
     def is_job_completed(self, uid: str):
         for history_item in self.history:
@@ -24,6 +25,17 @@ class History:
         for history_item in self.history:
             if history_item['uid'] == uid:
                 return history_item['uncompleted_tasks']
+
+    def create_job(self, up_name, uid, uncompleted_tasks):
+        job = {
+            'up_name': up_name,
+            'uid': uid,
+            'is_job_completed': False,
+            'completed_tasks': [],
+            'uncompleted_tasks': uncompleted_tasks,
+        }
+        self.history.append(job)
+        self.__save_history()
 
     def single_task_completed(self, uid: str, bv: str):
         for history_item in self.history:
@@ -41,3 +53,6 @@ class History:
     def __save_history(self):
         with open(file=fr'{cfg.save_path}\history.json', encoding='utf-8', mode='r') as file:
             json.dump(fp=file, ensure_ascii=False, obj=self.history)
+
+
+HistoryManager = __History()
