@@ -15,19 +15,16 @@ class History:
         with open(file=path, encoding='utf-8', mode='r') as file:
             self.history = json.load(fp=file)
 
-    @staticmethod
     def is_job_completed(self, uid: str):
         for history_item in self.history:
             if history_item['uid'] == uid:
                 return history_item['is_job_completed']
 
-    @staticmethod
     def get_uncompleted_tasks(self, uid: str):
         for history_item in self.history:
             if history_item['uid'] == uid:
                 return history_item['uncompleted_tasks']
 
-    @staticmethod
     def single_task_completed(self, uid: str, bv: str):
         for history_item in self.history:
             if history_item['uid'] == uid:
