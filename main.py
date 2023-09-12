@@ -13,13 +13,13 @@ def run(args):
 
     if args.time.lower() != 'now':
         logging.info('🕐 Waiting for timer...')
-        schedule.every().day.at().do(job_func=__run, args=args)
+        schedule.every().day.at(args.time).do(job_func=__run, args=args)
 
         while True:
             schedule.run_pending()
             time.sleep(1)
-
-    __run(args)
+    else:
+        __run(args)
 
 
 def __run(args):

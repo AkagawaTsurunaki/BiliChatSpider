@@ -24,3 +24,32 @@ class DatasetManager:
         logging.info(f'💾 {len(data)} records saved.')
 
     # TODO: 完成数据统计的功能
+
+    @staticmethod
+    def print_statistic():
+        statistic = []
+        total = 0
+        for space_id in os.listdir(cfg.save_path):
+            path = fr'{cfg.save_path}\{space_id}'
+            if os.path.isdir(path):
+                data_sum = 0
+                for file_name in os.listdir(path):
+                    with open(f'{path}\\{file_name}', 'r', encoding='utf-8') as file:
+                        data_list = json.load(fp=file)
+                        data_sum += len(data_list)
+
+                statistic.append({
+                    'space_id': space_id,
+                    'num': data_sum
+                })
+                total += data_sum
+
+        print(f'Dataset Statistic Result')
+        index = 1
+        for item in statistic:
+            space_id = item['space_id']
+            num = item['num']
+            print(f'{index} ({space_id}): {num}')
+            index += 1
+        print(f'Total: {total}')
+        return statistic
