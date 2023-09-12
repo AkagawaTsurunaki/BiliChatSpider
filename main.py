@@ -37,7 +37,7 @@ if __name__ == '__main__':
                                      epilog=''
                                      )
     parser.add_argument('-l', '--list', nargs='+', type=str)
-    parser.add_argument('-f', '--force', type=str, default='N')
+    parser.add_argument('-f', '--force', type=str, default='Y')
     parser.add_argument('-t', '--time', type=str, default='now')
 
     args = parser.parse_args()
