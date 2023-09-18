@@ -1,9 +1,8 @@
 # BiliChatSpider 
 By AkagawaTsurunaki.
 
-## Introduction
-
-A spider script which can crawl the comments under videos from Bilibili.
+A spider script which can crawl the comments under videos from Bilibili. 
+Supports automatic checkpoint recovery of historical records, basic data cleaning, and basic data statistics.
 
 ## Requirement
 
@@ -40,8 +39,6 @@ this argument specifies how many processes will be started in parallel.
 For instance, you want to crawl 4 hosts, which names are `嘉然今天吃什么`, `向晚大魔王`, `乃琳Queen` and `珈乐Carol`.
 In terminal please use command like following:
 ```shell
-cd D:\AkagawaTsurunaki\WorkSpace\PycharmProjects\BiliChatSpider
-conda activate BiliChatSpider
 python ./main.py `
 -l 672328094 672346917 672342685 351609538`
 ```
@@ -56,7 +53,40 @@ and then traverse the whole space to get the video list and store it in default 
 
 `-t` or `--time`: Set the time BiliChatSpider will start automatically.
 
+## Data Clean
+
+You should clean data with using command following
+```shell
+python __init__.py
+```
+Remember we set `./dataset` as default save path!
+
+The cleaned data will be written in default directory
+`./data_clean/train.json`.
+
+## Print Statistic Result
+Use command following to print what you have collected from Bilibili.
+```shell
+python ./statistic.py
+```
+
+The output format will be as follows.
+```
+{index} ({uid}): {number_of_comments}
+...
+Total: {total_number_of_all_comments}
+```
+
+## Author
+### AkagawaTsurunaki 
+
+E-mail: <a>AkagawaTsurunaki@outlook.com</a>
+
+Github: <a>https://github.com/AkagawaTsurunaki </a>
+
+If you have any questions, please raise them in the issue or contact me via E-mail.
+Thank you for your support and contributions to this project.
 ## License
 APACHE LICENSE, VERSION 2.0
 
-More detail to see https://www.apache.org/licenses/LICENSE-2.0.html
+For more details, please refer to https://www.apache.org/licenses/LICENSE-2.0.html
