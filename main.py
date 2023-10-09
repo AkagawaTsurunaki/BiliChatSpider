@@ -29,7 +29,9 @@ def __run(args):
 
 
 if __name__ == '__main__':
-    print('Bili Chat Spider')
+
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+    logging.info('🕷️ Bili Chat Spider 🕷️')
 
     # Initialize arguments parser.
     parser = argparse.ArgumentParser(prog='Bili Chat Spider',
