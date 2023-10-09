@@ -65,13 +65,26 @@ python ./main.py `
 
 And BiliChatSpider will automatically start and save comments data.
 
-`-l` or `--list`: a string list about the uid you want to crawl.
+`-l` or `--list`: A string list about the uid you want to crawl.
 
 `-f` or `--force`: Force the script to update the history cache, default to `'N'`, opposite to `Y`.
 BiliChatSpider will first open a page to get `up_name` 
 and then traverse the whole space to get the video list and store it in default path `.\dataset\history.json`. 
 
 `-t` or `--time`: Set the time BiliChatSpider will start automatically.
+
+If you want to crawl the videos related to specified uid. 
+In terminal please use command like following:
+
+```shell
+python ./main.py `
+-u 672328094 `
+-b BV14m4y1V7oj BV1Mm4y1V7R BV1Jw41117Zk
+```
+
+`-u` or `--uid`: The ID of an UP.
+
+`-b` or `--bv`: A string list of bv number related to the videos you want to crawl.
 
 ## Data Clean
 
