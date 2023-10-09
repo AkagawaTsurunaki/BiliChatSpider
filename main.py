@@ -9,7 +9,7 @@ from core.config_initializer import init_config_from_py
 
 def run(args):
     init_config_from_py()
-    logging.info('Custom configuration loaded.')
+    logging.info('⚙️ Custom configuration loaded.')
 
     if args.time.lower() != 'now':
         logging.info('🕐 Waiting for timer...')
@@ -29,9 +29,11 @@ def __run(args):
 
 
 if __name__ == '__main__':
+    print('🍻 Bili Chat Spider 🍻️')
 
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    logging.info('🕷️ Bili Chat Spider 🕷️')
+
+    logging.info(f'')
 
     # Initialize arguments parser.
     parser = argparse.ArgumentParser(prog='Bili Chat Spider',
