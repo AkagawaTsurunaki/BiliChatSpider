@@ -1,5 +1,4 @@
 import json
-import logging
 import os.path
 
 from config import chat_spider_config as cfg
@@ -8,7 +7,6 @@ from config import chat_spider_config as cfg
 class DatasetManager:
 
     def __init__(self):
-        logging.debug(f'permissions.default.image is set to 2, images in the website will not be loaded.')
         if not os.path.exists(cfg.save_path):
             os.makedirs(cfg.save_path)
 
@@ -21,8 +19,6 @@ class DatasetManager:
         # Save the data by saving as json file
         with open(file=fr'{path}\{bv}.json', mode='w', encoding='utf-8') as file:
             json.dump(obj=data, fp=file, ensure_ascii=False)
-
-        logging.info(f'💾 {len(data)} records saved.')
 
     @staticmethod
     def print_statistic():
