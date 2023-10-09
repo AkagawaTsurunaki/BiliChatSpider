@@ -61,9 +61,9 @@ def run():
     print(f'Original data size: {len(data)}')
 
     # Maintain data with UFT-8 and the confidence of the encoding is greater than 99
-    data = process_array_in_parallel(data, core_num, func=encoding_filter)
-    print(f'Non-UTF-8 excluded data size: {len(data)}')
-
+    # data = process_array_in_parallel(data, core_num, func=encoding_filter)
+    # print(f'Non-UTF-8 excluded data size: {len(data)}')
+    #
     data = process_array_in_parallel(data, core_num, func=reply_symbol_filter)
     print(f'Reply-symbol excluded data size: {len(data)}')
 
@@ -75,11 +75,11 @@ def run():
 
     print(f'Final data size: {len(data)}')
 
-    train_data, val_data = train_test_split(data, test_size=0.01, random_state=114514)
+    train_data, val_data = train_test_split(data, test_size=0.0001, random_state=114514)
     with open(file=fr'.\train.json', mode='w', encoding='utf-8') as file:
-        json.dump(ensure_ascii=False, fp=file, obj=data, indent=4)
-    # with open(file=fr'.\dev.json', mode='w', encoding='utf-8') as file:
-    #     json.dump(ensure_ascii=False, fp=file, obj=val_data, indent=4)
+        json.dump(ensure_ascii=False, fp=file, obj=train_data, indent=4)
+    with open(file=fr'.\dev.json', mode='w', encoding='utf-8') as file:
+        json.dump(ensure_ascii=False, fp=file, obj=val_data, indent=4)
 
 
 if __name__ == '__main__':
