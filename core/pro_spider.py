@@ -41,6 +41,7 @@ class ProSpider:
             # Find elements that contain information of the video list.
             elems = self.driver.find_element(By.CLASS_NAME, 'list-list').find_elements(By.CLASS_NAME, 'list-item')
             self.driver.implicitly_wait(implicitly_wait_time)
+            time.sleep(Random().randint(a=3, b=5))
 
             # If there are no more specified elements to be found, then break.
             if len(elems) == 0:
