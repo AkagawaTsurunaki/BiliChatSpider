@@ -23,12 +23,14 @@ class DatasetManager:
 
         logging.info(f'💾 {len(data)} records saved.')
 
-    # TODO: 完成数据统计的功能
-
     @staticmethod
     def print_statistic():
         statistic = []
         total = 0
+
+        if not os.path.exists(cfg.save_path):
+            raise FileNotFoundError('Save path is not found, please check your configuration file.')
+
         for space_id in os.listdir(cfg.save_path):
             path = fr'{cfg.save_path}\{space_id}'
             if os.path.isdir(path):
