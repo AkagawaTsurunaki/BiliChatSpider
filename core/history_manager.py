@@ -11,7 +11,7 @@ class __History:
         path = fr'{cfg.save_path}\history.json'
 
         if not os.path.exists(path):
-            os.makedirs(path)
+            open(file=path, mode='w').close()
         self.history = []
 
     def __load(self):
