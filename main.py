@@ -23,9 +23,13 @@ def run(args):
 
 
 def __run(args):
-    for uid in args.list:
-        ProSpider().update_job(uid=uid, force_create_job=args.force.lower() != 'n')
-        core.multitask_spider.run(uid=uid)
+    if len(args.bv) != 0:
+        core.multitask_spider.run_specified(args.uid, args.bv)
+
+    if args.list is not None and (args.list) != 0:
+        for uid in args.list:
+            ProSpider().update_job(uid=uid, force_create_job=args.force.lower() != 'n')
+            core.multitask_spider.run(uid=uid)
 
 
 if __name__ == '__main__':
@@ -40,6 +44,8 @@ if __name__ == '__main__':
                                          epilog=''
                                          )
         parser.add_argument('-l', '--list', nargs='+', type=str)
+        parser.add_argument('-b', '--bv', nargs='+', type=str)
+        parser.add_argument('-u', '--uid', type=str)
         parser.add_argument('-f', '--force', type=str, default='Y')
         parser.add_argument('-t', '--time', type=str, default='now')
 
@@ -50,3 +56,4 @@ if __name__ == '__main__':
         logging.info(f'✅ All tasks completed.')
     except Exception as e:
         logging.fatal(f'💥 {e.__class__.__name__} is the chief culprit!')
+        raise e
