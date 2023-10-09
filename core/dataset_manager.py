@@ -8,7 +8,6 @@ from config import chat_spider_config as cfg
 class DatasetManager:
 
     def __init__(self):
-        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
         if not os.path.exists(cfg.save_path):
             os.makedirs(cfg.save_path)
 
@@ -30,9 +29,7 @@ class DatasetManager:
         total = 0
 
         if not os.path.exists(cfg.save_path):
-            msg = 'Save path is not found, please check your configuration file.'
-            logging.error(msg)
-            raise FileNotFoundError(msg)
+            raise FileNotFoundError('Save path is not found, please check your configuration file.')
 
         for space_id in os.listdir(cfg.save_path):
             path = fr'{cfg.save_path}\{space_id}'

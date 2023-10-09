@@ -1,7 +1,7 @@
-firefox_profile_dir = r"C:\Users\96514\AppData\Roaming\Mozilla\Firefox\Profiles\m5xs216e.default-release"
-firefox_driver_dir = r"C:\Program Files\Mozilla Firefox\geckodriver.exe"
+firefox_profile_dir = fr''
+firefox_driver_dir = fr''
 
-save_path = r"D:\AkagawaTsurunaki\WorkSpace\PycharmProjects\BiliChatSpider\dataset"
+save_path = fr''
 
 sleep_time_before_job_launching = 4
 sleep_time_after_job_launching = 4

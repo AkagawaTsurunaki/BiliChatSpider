@@ -8,7 +8,6 @@ from core.driver_initilizer import DriverInitializer
 from core.history_manager import HistoryManager
 from core.single_task_spider import SingleTaskSpider
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 def __run_single_task(history: HistoryManager, uid: str, bv: str):
     logging.debug(f'Task {bv} executing...')
