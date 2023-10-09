@@ -8,6 +8,7 @@ from config import chat_spider_config as cfg
 class DatasetManager:
 
     def __init__(self):
+        logging.debug(f'permissions.default.image is set to 2, images in the website will not be loaded.')
         if not os.path.exists(cfg.save_path):
             os.makedirs(cfg.save_path)
 
