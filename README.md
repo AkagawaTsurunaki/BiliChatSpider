@@ -6,7 +6,27 @@ Supports automatic checkpoint recovery of historical records, basic data cleanin
 
 ## Requirement
 
+
+### Firefox Browser
+
+You can download and install Firefox browser through the following link:
+
+https://www.firefox.com.cn/
+
+### Firefox Geckodriver
+
+You can download Firefox geckodriver through the following link:
+
+https://github.com/mozilla/geckodriver/releases
+
+Remember that the version of browser and driver should correspond.
+
 Use pip command to install all of required libs.
+
+### Python
+
+We suppose you have installed Python in your computer. 
+Then you should install all dependencies through this command.
 
 ```shell
 pip install -r requirements.txt
