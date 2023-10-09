@@ -1,5 +1,5 @@
 max_parallel_job_num = 10
-save_path = r".\dataset"
+save_path = r"..\dataset"
 firefox_profile_dir = r""
 firefox_driver_dir = r""
 sleep_time_before_job_launching = 4
