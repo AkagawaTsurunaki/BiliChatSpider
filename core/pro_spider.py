@@ -6,11 +6,13 @@ from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from core.history_manager import HistoryManager
 from core.driver_initilizer import DriverInitializer
+import logging
 
 
 class ProSpider:
 
     def __init__(self):
+        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
         self.driver = DriverInitializer.get_firefox_driver()
 
     def update_job(self, uid: str, force_create_job: bool = False):

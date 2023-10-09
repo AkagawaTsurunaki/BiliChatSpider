@@ -1,3 +1,4 @@
+import logging
 import json
 import os
 from json import JSONDecodeError
@@ -8,6 +9,7 @@ import config.chat_spider_config as cfg
 class __History:
 
     def __init__(self):
+        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
         path = fr'{cfg.save_path}\history.json'
 
         if not os.path.exists(path):

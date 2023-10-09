@@ -3,7 +3,6 @@ import random
 import time
 
 from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox import webdriver
 
 
 class SingleTaskSpider:
@@ -18,6 +17,7 @@ class SingleTaskSpider:
         return True
 
     def __init__(self, driver):
+        logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
         self.reply_record_list = []
         self.driver = driver
         self.implicitly_wait_second = 0.5
