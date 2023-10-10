@@ -23,7 +23,7 @@ def run(args):
 
 
 def __run(args):
-    if len(args.bv) != 0:
+    if args.bv is not None and len(args.bv) != 0:
         core.multitask_spider.run_specified(args.uid, args.bv)
 
     if args.list is not None and (args.list) != 0:
