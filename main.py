@@ -23,13 +23,13 @@ def run(args):
 
 
 def __run(args):
-    if args.bv is not None and len(args.bv) != 0:
-        core.multitask_spider.run_specified(args.uid, args.bv)
+    if args.bv is not None and args.uid is not None and len(args.bv) != 0:
+        core.multitask_spider.run_bv_list(args.uid, args.bv)
 
     if args.list is not None and (args.list) != 0:
         for uid in args.list:
             ProSpider().update_job(uid=uid, force_create_job=args.force.lower() != 'n')
-            core.multitask_spider.run(uid=uid)
+            core.multitask_spider.run_uid_list(uid=uid)
 
 
 if __name__ == '__main__':

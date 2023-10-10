@@ -33,20 +33,20 @@ def __load(uid, bv_list: list):
     pool.join()
 
 
-def run_specified(uid: str, bv_list: list):
+def run_bv_list(uid: str, bv_list: list):
     if len(bv_list) == 0:
         return
 
-    logging.info(f'📦 Job (uid={uid}) loaded. {len(bv_list)} video specified.')
+    logging.info(f'📦 Job (uid={uid}) loaded. {len(bv_list)} tasks loaded.')
     __load(uid, bv_list)
-    logging.info(f'📦 Job (uid={uid}) completed.')
+    logging.info(f'📦 Job (uid={uid}) completed. {len(bv_list)} tasks completed.')
 
 
-def run(uid: str):
+def run_uid_list(uid: str):
     # If the job is completed then return straightly
     if HistoryManager.is_job_completed(uid):
         return
-
-    logging.info(f'📦 Job (uid={uid}) loaded.')
-    __load(uid, HistoryManager.get_uncompleted_tasks(uid))
-    logging.info(f'📦 Job (uid={uid}) completed.')
+    uncompleted_tasks = HistoryManager.get_uncompleted_tasks(uid)
+    logging.info(f'📦 Job (uid={uid}) loaded. {len(uncompleted_tasks)} tasks loaded')
+    __load(uid, uncompleted_tasks)
+    logging.info(f'📦 Job (uid={uid}) completed. {len(uncompleted_tasks)} tasks completed.')
