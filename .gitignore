@@ -1,4 +1,5 @@
 dataset
+xhs_dataset
 *.log
 *.json
 *.zip

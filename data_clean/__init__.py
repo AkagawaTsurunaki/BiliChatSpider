@@ -4,6 +4,8 @@ import multiprocessing
 import os
 
 from sklearn.model_selection import train_test_split
+
+from data_clean.filter.short_word_filter import short_word_filter
 from filter.reply_symbol_filter import reply_symbol_filter, reply_symbol_filter_2
 from filter.encoding_filter import encoding_filter
 from filter.blank_filter import blank_filter
@@ -64,22 +66,25 @@ def run():
     # data = process_array_in_parallel(data, core_num, func=encoding_filter)
     # print(f'Non-UTF-8 excluded data size: {len(data)}')
     #
+    data = process_array_in_parallel(data, core_num, func=short_word_filter)
+    print(f'short_word_filter: {len(data)}  records left.')
+
     data = process_array_in_parallel(data, core_num, func=reply_symbol_filter)
-    print(f'Reply-symbol excluded data size: {len(data)}')
+    print(f'reply_symbol_filter: {len(data)}  records left.')
 
     data = process_array_in_parallel(data, core_num, func=blank_filter)
-    print(f'Blank replies excluded data size: {len(data)}')
+    print(f'blank_filter: {len(data)}  records left.')
 
     data = process_array_in_parallel(data, core_num, func=reply_symbol_filter_2)
-    print(f'Blank replies excluded data size: {len(data)}')
+    print(f'reply_symbol_filter_2: {len(data)} records left.')
 
     print(f'Final data size: {len(data)}')
 
-    train_data, val_data = train_test_split(data, test_size=0.0001, random_state=114514)
-    with open(file=fr'.\train.json', mode='w', encoding='utf-8') as file:
-        json.dump(ensure_ascii=False, fp=file, obj=train_data, indent=4)
-    with open(file=fr'.\dev.json', mode='w', encoding='utf-8') as file:
-        json.dump(ensure_ascii=False, fp=file, obj=val_data, indent=4)
+    # train_data, val_data = train_test_split(data, test_size=0.01, random_state=114514)
+    with open(file=fr'.\dataset.json', mode='w', encoding='utf-8') as file:
+        json.dump(ensure_ascii=False, fp=file, obj=data, indent=4)
+    # with open(file=fr'.\dev.json', mode='w', encoding='utf-8') as file:
+    #     json.dump(ensure_ascii=False, fp=file, obj=val_data, indent=4)
 
 
 if __name__ == '__main__':
