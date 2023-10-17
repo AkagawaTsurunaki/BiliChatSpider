@@ -1,4 +1,3 @@
-import json
 import logging
 import time
 from typing import List
@@ -55,6 +54,10 @@ class XhsSingleTaskSpider:
         self.driver.implicitly_wait(1)
         root = ReplyNode(username=username_elem.text, content=title_elem.text + detail_elem.text)
         return root
+
+    def __refactor(self):
+        # TODO: To refactor nodes in Layer3
+        pass
 
     def __deep(self, root: ReplyNode, i, j):
         reply_name_xpath = f'/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[{i}]/div/div[2]/div[5]/div/div[{j}]/div/div[2]/div[1]/div/a'
@@ -122,5 +125,6 @@ class XhsSingleTaskSpider:
 if __name__ == '__main__':
     print(cfg.xhs_save_path)
     driver = DriverInitializer.get_firefox_driver()
+    # TODO: Change it to a var
     XhsSingleTaskSpider(driver).collect('651280e60000000020000fa4')
     # Command parse
