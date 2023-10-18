@@ -21,6 +21,20 @@ class DatasetManager:
             json.dump(obj=data, fp=file, ensure_ascii=False)
 
     @staticmethod
+    def save_xhs_single_task(cls: str, page_id: str, data):
+        try:
+            # Prevent from raising exception if the folder is not created
+            path = fr'{cfg.xhs_save_path}\{cls}'
+            if not os.path.exists(path):
+                os.makedirs(path)
+            # Save the data by saving as json file
+            with open(file=fr'{path}\{page_id}.json', mode='w', encoding='utf-8') as file:
+                json.dump(obj=data, fp=file, ensure_ascii=False)
+                return True
+        except IOError:
+            return False
+
+    @staticmethod
     def print_statistic():
         statistic = []
         total = 0
