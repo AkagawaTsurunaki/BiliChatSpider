@@ -1,6 +1,7 @@
 import logging
 import time
 from typing import List
+import re
 
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -39,7 +40,7 @@ class ReplyNode:
 
         return None
 
-
+reply_regex = re.compile('回复\s(.*)\s*[：:]\s*(.*)')
 class XhsSingleTaskSpider:
 
     def __init__(self, driver):
@@ -55,9 +56,27 @@ class XhsSingleTaskSpider:
         root = ReplyNode(username=username_elem.text, content=title_elem.text + detail_elem.text)
         return root
 
-    def __refactor(self):
-        # TODO: To refactor nodes in Layer3
-        pass
+    def __refactor(self, root: ReplyNode):
+        for second_child in root.children:
+            duplicate_children = second_child.children.copy()
+            second_child.children = []
+            for i, third_child in enumerate(duplicate_children):
+                result = reply_regex.search(third_child.content)
+                if result is None:
+                    second_child.children.append(third_child)
+                    continue
+                reply_to = result.group(1)
+                third_child.content = result.group(2)
+
+                appended = False
+                for recent_child in duplicate_children[i::-1]:
+                    if recent_child.username == reply_to:
+                        recent_child.children.append(third_child)
+                        appended = True
+                        break
+                if not appended:
+                    second_child.children.append(third_child)
+
 
     def __deep(self, root: ReplyNode, i, j):
         reply_name_xpath = f'/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[{i}]/div/div[2]/div[5]/div/div[{j}]/div/div[2]/div[1]/div/a'
@@ -70,6 +89,8 @@ class XhsSingleTaskSpider:
 
         node = ReplyNode(username=reply_name_elem.text, content=reply_content_elem.text)
         root.add(node)
+
+        self.__refactor(node)
 
         return root
 
