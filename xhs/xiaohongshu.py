@@ -1,56 +1,22 @@
-import json
 import logging
-import time
-from typing import List
 import re
+import time
 
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 
+from core.common import open_page, xhs_scroll
+from core.data_structure import ReplyNode
 from core.dataset_manager import DatasetManager
 from core.driver_initilizer import DriverInitializer
-
-from config import chat_spider_config as cfg
-from core.common import open_page, scroll, xhs_scroll
-
-
-class ReplyNode:
-    def __init__(self, username: str, content: str):
-        self.username: str = username
-        self.content: str = content
-        self.children: List[ReplyNode] = []
-
-    def __dict__(self):
-        return {
-            "username": self.username,
-            "content": self.content,
-            "children": [child.__dict__() for child in self.children]
-        }
-
-    def add(self, node):
-        if node is not None:
-            self.children.append(node)
-
-    def find(self, username):
-        if self.username == username:
-            return self
-
-        for node in self.children:
-            result = node.find(username)
-            if result is not None:
-                return result
-
-        return None
-
-
-reply_regex = re.compile('回复\s(.*)\s*[：:]\s*(.*)')
 
 
 class XhsSingleTaskSpider:
 
     def __init__(self, driver):
         self.driver: WebDriver = driver
+        self.reply_regex = re.compile('回复\s(.*)\s*[：:]\s*(.*)')
 
     def __get_root(self):
         username_elem = self.driver.find_element(By.XPATH,
@@ -62,13 +28,12 @@ class XhsSingleTaskSpider:
         root = ReplyNode(username=username_elem.text, content=title_elem.text + detail_elem.text)
         return root
 
-    @staticmethod
-    def __refactor(root: ReplyNode):
+    def __refactor(self, root: ReplyNode):
         for second_child in root.children:
             duplicate_children = second_child.children.copy()
             second_child.children = []
             for i, third_child in enumerate(duplicate_children):
-                result = reply_regex.search(third_child.content)
+                result = self.reply_regex.search(third_child.content)
                 if result is None:
                     second_child.children.append(third_child)
                     continue
@@ -156,8 +121,9 @@ class XhsSingleTaskSpider:
         DatasetManager.save_xhs_single_task(cls, post_id, root.__dict__())
 
 
-if __name__ == '__main__':
-    print(cfg.xhs_save_path)
+def collect_single_task(cls: str, post_id: str):
+    if cls is None or post_id is None:
+        raise ValueError()
     driver = DriverInitializer.get_firefox_driver()
-    XhsSingleTaskSpider(driver).collect(cls='下头', post_id='651280e60000000020000fa4')
+    XhsSingleTaskSpider(driver).collect(cls, post_id)
     # Command parse
