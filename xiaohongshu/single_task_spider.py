@@ -77,33 +77,37 @@ class XhsSingleTaskSpider:
             pass
 
     def __collect(self, root: ReplyNode, max_post_count=20, max_response_count=100):
-        # Show more comments
-        for i in range(1, max_post_count):
-            comment_xpath = f'/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[{i}]'
-            comment_content_xpath = f'/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[{i}]/div/div[2]/div[2]'
-            comment_name_xpath = f'/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[{i}]/div/div[2]/div[1]/div/a'
+        try:
+            # Show more comments
+            for i in range(1, max_post_count):
+                comment_xpath = f'/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[{i}]'
+                comment_content_xpath = f'/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[{i}]/div/div[2]/div[2]'
+                comment_name_xpath = f'/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[2]/div/div[2]/div[{i}]/div/div[2]/div[1]/div/a'
 
-            comment_name_elem = self.driver.find_element(By.XPATH, comment_name_xpath)
-            comment_elem = self.driver.find_element(By.XPATH, comment_xpath)
-            comment_content_elem = self.driver.find_element(By.XPATH, comment_content_xpath)
-            self.driver.implicitly_wait(1)
+                comment_name_elem = self.driver.find_element(By.XPATH, comment_name_xpath)
+                comment_elem = self.driver.find_element(By.XPATH, comment_xpath)
+                comment_content_elem = self.driver.find_element(By.XPATH, comment_content_xpath)
+                self.driver.implicitly_wait(1)
 
-            comment = ReplyNode(username=comment_name_elem.text, content=comment_content_elem.text)
-            root.add(comment)
+                comment = ReplyNode(username=comment_name_elem.text, content=comment_content_elem.text)
+                root.add(comment)
 
-            self.show_more(comment_elem)
+                self.show_more(comment_elem)
 
-            # Deep Search
-            try:
-                for j in range(1, max_response_count):
-                    comment = self.__deep(comment, i, j)
-            except NoSuchElementException:
-                pass
+                # Deep Search
+                try:
+                    for j in range(1, max_response_count):
+                        comment = self.__deep(comment, i, j)
+                except NoSuchElementException:
+                    pass
 
-            xhs_scroll(self.driver, 1)
+                xhs_scroll(self.driver, 1)
 
-        self.__refactor(root)
-        return root
+            self.__refactor(root)
+            return root
+
+        except NoSuchElementException:
+            return root
 
     def collect(self, cls: str, post_id: str):
         open_page(self.driver, f'https://www.xiaohongshu.com/explore/{post_id}')
@@ -118,7 +122,7 @@ class XhsSingleTaskSpider:
         root = self.__collect(root)
 
         # Saved
-        DatasetManager.save_xhs_single_task(cls, post_id, root.__dict__())
+        DatasetManager().save_xhs_single_task(cls, post_id, root.__dict__())
 
 
 def collect_single_task(cls: str, post_id: str):
@@ -126,4 +130,3 @@ def collect_single_task(cls: str, post_id: str):
         raise ValueError()
     driver = DriverInitializer.get_firefox_driver()
     XhsSingleTaskSpider(driver).collect(cls, post_id)
-    # Command parse

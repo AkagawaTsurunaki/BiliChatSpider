@@ -1,4 +1,5 @@
 import json
+import logging
 import os.path
 
 from config import chat_spider_config as cfg
@@ -18,18 +19,24 @@ class DatasetManager:
             os.makedirs(path)
         # Save the data by saving as json file
         with open(file=fr'{path}\{bv}.json', mode='w', encoding='utf-8') as file:
-            json.dump(obj=data, fp=file, ensure_ascii=False)
+            json.dump(obj=data, fp=file, ensure_ascii=False, indent=4)
+
+    def save_xhs_single_task(self, cls: str, page_id: str, data):
+
+        # Prevent from raising exception if the folder is not created
+        path = fr'{cfg.xhs_save_path}\{cls}'
+        if not os.path.exists(path):
+            os.makedirs(path)
+        # Save the data by saving as json file
+        path = fr'{path}\{page_id}.json'
+        if self.save_json(path, data):
+            logging.debug(f'{path} is saved.')
 
     @staticmethod
-    def save_xhs_single_task(cls: str, page_id: str, data):
+    def save_json(path: str, obj):
         try:
-            # Prevent from raising exception if the folder is not created
-            path = fr'{cfg.xhs_save_path}\{cls}'
-            if not os.path.exists(path):
-                os.makedirs(path)
-            # Save the data by saving as json file
-            with open(file=fr'{path}\{page_id}.json', mode='w', encoding='utf-8') as file:
-                json.dump(obj=data, fp=file, ensure_ascii=False)
+            with open(file=path, mode='w', encoding='utf-8') as file:
+                json.dump(obj=obj, fp=file, ensure_ascii=False, indent=4)
                 return True
         except IOError:
             return False
