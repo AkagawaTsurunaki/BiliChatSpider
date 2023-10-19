@@ -4,6 +4,11 @@ By AkagawaTsurunaki.
 A spider script which can crawl the comments under videos from Bilibili. 
 Supports automatic checkpoint recovery of historical records, basic data cleaning, and basic data statistics.
 
+**2023/10/19**
+
+Now we support collect comments from Xiaohongshu 
+and save data as a tree structure. 
+
 ## Requirement
 
 
@@ -110,6 +115,15 @@ The output format will be as follows.
 Total: {total_number_of_all_comments}
 ```
 
+## Question
+
+### Why is Google Chrome not supported?
+
+In previous version of `BiliChatSpider`, I found that Chrome browser will cause **Memory Leaky** 
+while Firefox will not. 
+
+Therefore, I suppose you use Firefox to run this script program.
+
 ## Author
 ### AkagawaTsurunaki 
 
@@ -119,6 +133,14 @@ Github: <a>https://github.com/AkagawaTsurunaki </a>
 
 If you have any questions, please raise them in the issue or contact me via E-mail.
 Thank you for your support and contributions to this project.
+
+## Disclaimer
+
+This program can only be used for study.
+
+You will not be liable for any legal consequences arising from your use of this product!
+
+
 ## License
 APACHE LICENSE, VERSION 2.0
 
