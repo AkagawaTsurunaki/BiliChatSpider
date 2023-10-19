@@ -14,6 +14,13 @@ class ReplyNode:
             "children": [child.__dict__() for child in self.children]
         }
 
+    def __len__(self):
+        count = len(self.children) + 1
+        if len(self.children) != 0:
+            for child in self.children:
+                count += child.__len__()
+        return count
+
     def add(self, node):
         if node is not None:
             self.children.append(node)
