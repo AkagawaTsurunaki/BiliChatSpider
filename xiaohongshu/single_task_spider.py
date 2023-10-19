@@ -21,11 +21,16 @@ class XhsSingleTaskSpider:
     def __get_root(self):
         username_elem = self.driver.find_element(By.XPATH,
                                                  '/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[1]/div/div[1]/a[2]')
-        title_elem = self.driver.find_element(By.XPATH, '//*[@id="detail-title"]')
+        try:
+            title_elem = self.driver.find_element(By.XPATH, '//*[@id="detail-title"]')
+        except NoSuchElementException:
+            title_elem = None
+
         detail_elem = self.driver.find_element(By.XPATH,
                                                '/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[1]/div[2]/span[1]')
-        self.driver.implicitly_wait(1)
-        root = ReplyNode(username=username_elem.text, content=title_elem.text + detail_elem.text)
+        self.driver.implicitly_wait(2)
+        root = ReplyNode(username=username_elem.text,
+                         content=title_elem.text if title_elem is not None else '' + detail_elem.text)
         return root
 
     def __refactor(self, root: ReplyNode):
@@ -121,12 +126,4 @@ class XhsSingleTaskSpider:
         # Refactored root with children
         root = self.__collect(root)
 
-        # Saved
-        DatasetManager().save_xhs_single_task(cls, post_id, root.__dict__())
-
-
-def collect_single_task(cls: str, post_id: str):
-    if cls is None or post_id is None:
-        raise ValueError()
-    driver = DriverInitializer.get_firefox_driver()
-    XhsSingleTaskSpider(driver).collect(cls, post_id)
+        return root
