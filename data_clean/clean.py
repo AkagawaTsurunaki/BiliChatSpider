@@ -3,7 +3,7 @@ import json
 import multiprocessing
 import os
 
-from sklearn.model_selection import train_test_split
+# from sklearn.model_selection import train_test_split
 
 from data_clean.filter.short_word_filter import short_word_filter
 from filter.reply_symbol_filter import reply_symbol_filter, reply_symbol_filter_2
