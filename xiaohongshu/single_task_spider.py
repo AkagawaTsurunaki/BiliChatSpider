@@ -8,8 +8,7 @@ from selenium.webdriver.firefox.webdriver import WebDriver
 
 from core.common import open_page, xhs_scroll
 from core.data_structure import ReplyNode
-from core.dataset_manager import DatasetManager
-from core.driver_initilizer import DriverInitializer
+from data_clean.filter.at_filter import at_filter
 
 
 class XhsSingleTaskSpider:
@@ -114,7 +113,7 @@ class XhsSingleTaskSpider:
         except NoSuchElementException:
             return root
 
-    def collect(self, cls: str, post_id: str):
+    def collect(self, post_id: str):
         open_page(self.driver, f'https://www.xiaohongshu.com/explore/{post_id}')
 
         # Start collect
@@ -125,5 +124,8 @@ class XhsSingleTaskSpider:
 
         # Refactored root with children
         root = self.__collect(root)
+
+        # At filter to remove atmark
+        # at_filter(root)
 
         return root

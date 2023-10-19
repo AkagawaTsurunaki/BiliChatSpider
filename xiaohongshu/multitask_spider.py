@@ -31,7 +31,7 @@ def xhs_exist(post_id: str):
 def __run_single_task(cls: str, post_id: str):
     logging.debug(f'📄 Task (post_id={post_id}) executing...')
     driver = DriverInitializer.get_firefox_driver()
-    data: ReplyNode = XhsSingleTaskSpider(driver).collect(cls, post_id)
+    data: ReplyNode = XhsSingleTaskSpider(driver).collect(post_id)
     DatasetManager().save_xhs_single_task(cls, post_id, data.__dict__())
     driver.close()
     driver.quit()

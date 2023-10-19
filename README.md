@@ -90,7 +90,7 @@ python ./main.py `
 
 You should clean data with using command following
 ```shell
-python __init__.py
+python clean.py
 ```
 Remember we set `./dataset` as default save path!
 
