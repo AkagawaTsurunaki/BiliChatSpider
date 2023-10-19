@@ -73,3 +73,8 @@ class DatasetManager:
             index += 1
         print(f'Total: {total}')
         return statistic
+
+
+    def print_xhs_statistic(self):
+        # TODO: Need to be implemented
+         pass
