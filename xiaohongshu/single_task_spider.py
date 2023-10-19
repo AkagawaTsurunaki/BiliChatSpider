@@ -93,7 +93,13 @@ class XhsSingleTaskSpider:
                 comment_content_elem = self.driver.find_element(By.XPATH, comment_content_xpath)
                 self.driver.implicitly_wait(1)
 
-                comment = ReplyNode(username=comment_name_elem.text, content=comment_content_elem.text)
+                username = comment_name_elem.text
+                content = comment_content_elem.text
+
+                if username == '' or content == '':
+                    continue
+
+                comment = ReplyNode(username, content)
                 root.add(comment)
 
                 self.show_more(comment_elem)
@@ -107,9 +113,7 @@ class XhsSingleTaskSpider:
 
                 xhs_scroll(self.driver, 1)
 
-            self.__refactor(root)
             return root
-
         except NoSuchElementException:
             return root
 
@@ -125,7 +129,9 @@ class XhsSingleTaskSpider:
         # Refactored root with children
         root = self.__collect(root)
 
+        self.__refactor(root)
+
         # At filter to remove atmark
-        # at_filter(root)
+        at_filter(root)
 
         return root
