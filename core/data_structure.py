@@ -7,12 +7,21 @@ class ReplyNode:
         self.content: str = content
         self.children: List[ReplyNode] = []
 
-    def __dict__(self):
+    def dict(self):
         return {
             "username": self.username,
             "content": self.content,
-            "children": [child.__dict__() for child in self.children]
+            "children": [child.dict() for child in self.children]
         }
+
+    @staticmethod
+    def from_dict(d):
+        node = ReplyNode(d['username'], d['content'])
+        children = d.get('children', [])
+        for child in children:
+            node.children.append(ReplyNode.from_dict(child))
+        return node
+
 
     def __len__(self):
         count = len(self.children) + 1
