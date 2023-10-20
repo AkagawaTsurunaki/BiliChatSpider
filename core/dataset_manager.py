@@ -80,7 +80,7 @@ class DatasetManager:
         file_path_list = []
         for dirpath, _, filenames in os.walk(path, topdown=True):
             file_path_list += [os.path.join(dirpath, filename) for filename in filenames]
-        return file_path_list
+        return list(set(file_path_list))
 
     @staticmethod
     def print_xhs_statistic():
