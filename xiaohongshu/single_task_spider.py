@@ -132,6 +132,6 @@ class XhsSingleTaskSpider:
         self.__refactor(root)
 
         # At filter to remove atmark
-        at_filter(root)
+        root = at_filter(root)
 
         return root
