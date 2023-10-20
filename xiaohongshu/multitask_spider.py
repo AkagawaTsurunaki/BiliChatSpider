@@ -51,7 +51,7 @@ def __load(cls: str, post_id_list: list):
 
 def collect_by_channel_id(cls: str, channel_id: str):
     url = f'https://www.xiaohongshu.com/explore?channel_id={channel_id}'
-    driver = DriverInitializer.get_firefox_driver()
+    driver = DriverInitializer.get_firefox_driver(stylesheet=True)
     open_page(driver, url, 0)
     scroll(driver, 3000, 4)
 
