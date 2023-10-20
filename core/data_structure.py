@@ -22,12 +22,12 @@ class ReplyNode:
             node.children.append(ReplyNode.from_dict(child))
         return node
 
-
     def __len__(self):
-        count = len(self.children) + 1
-        if len(self.children) != 0:
-            for child in self.children:
-                count += child.__len__()
+        if self is None:
+            return 0
+        count = 1
+        for child in self.children:
+            count += len(child)
         return count
 
     def add(self, node):
