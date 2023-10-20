@@ -3,7 +3,8 @@ import re
 
 at_regex = re.compile('@.+?\s*')
 
-def at_filter(node: ReplyNode) -> ReplyNode:
+
+def at_filter(node: ReplyNode) -> ReplyNode | None:
     new_node = ReplyNode(node.username, at_regex.sub('', node.content).strip())
     if new_node.content == '':
         return None
