@@ -27,10 +27,10 @@ def open_page(driver, url: str, wait_time=5):
     logging.debug(f'🌐 Successfully open the page at {url}". ')
 
 
-def scroll(driver, offset, count=1):
+def scroll(driver, offset, count=1, sleep_time=0.7):
     # Control the page to scroll
     for _ in range(count):
-        time.sleep(0.7)
+        time.sleep(sleep_time)
         driver.execute_script(f'window.scrollBy(0,{offset})')
     logging.debug(
         f'🖱️ Total number of pixels of scrolling is {count * offset}. ')
