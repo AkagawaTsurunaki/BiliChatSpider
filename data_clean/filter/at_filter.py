@@ -1,18 +1,16 @@
 from core.data_structure import ReplyNode
 import re
 
-at_regex = re.compile('^@.+$')
-at_content_regex = re.compile('^@.+\s+(.*)$')
+at_regex = re.compile('@.+?\s*')
 
+def at_filter(node: ReplyNode) -> ReplyNode:
+    new_node = ReplyNode(node.username, at_regex.sub('', node.content).strip())
+    if new_node.content == '':
+        return None
 
-def at_filter(node: ReplyNode):
-    for child in node.children.copy():
-        result = at_regex.match(child.content)
-        if result is None:
-            continue
-        result = at_content_regex.match(child.content)
-        if result is None:
-            node.children.remove(child)
-        else:
-            child.content = result.group(1)
-            at_filter(child)
+    for child in node.children:
+        new_child = at_filter(child)
+        if new_child is not None:
+            new_node.children.append(new_child)
+
+    return new_node
