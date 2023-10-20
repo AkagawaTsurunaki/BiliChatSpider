@@ -3,6 +3,7 @@ import logging
 import os.path
 
 from config import chat_spider_config as cfg
+from core.common import open_json
 
 
 class DatasetManager:
@@ -74,7 +75,19 @@ class DatasetManager:
         print(f'Total: {total}')
         return statistic
 
+    @staticmethod
+    def __get_xhs_saved_file_name_list(path=cfg.xhs_save_path):
+        file_path_list = []
+        for dirpath, _, filenames in os.walk(path, topdown=True):
+            file_path_list += [os.path.join(dirpath, filename) for filename in filenames]
+        return file_path_list
 
-    def print_xhs_statistic(self):
-        # TODO: Need to be implemented
-         pass
+    @staticmethod
+    def print_xhs_statistic():
+        print(f'Dataset (Xiaohongshu) Statistic Result')
+        total = 0
+        for filepath in DatasetManager.__get_xhs_saved_file_name_list():
+            root = open_json(filepath)
+            total += len(root)
+        print(f'Total: {total}')
+        return total

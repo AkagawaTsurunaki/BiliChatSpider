@@ -1,9 +1,21 @@
+import json
 import logging
 import random
 import time
 
 from selenium.webdriver.firefox.webdriver import WebDriver
 
+from core.data_structure import ReplyNode
+
+
+def open_json(path: str):
+    try:
+        with open(file=path, mode='r', encoding='utf-8') as file:
+            dat = json.load(fp=file)
+
+            return ReplyNode.from_dict(dat)
+    except IOError:
+        return None
 
 def open_page(driver, url: str, wait_time=5):
     # Open specified page
