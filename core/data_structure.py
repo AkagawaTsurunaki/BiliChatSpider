@@ -7,11 +7,11 @@ class ReplyNode:
         self.content: str = content
         self.children: List[ReplyNode] = []
 
-    def dict(self):
+    def to_dict(self):
         return {
             "username": self.username,
             "content": self.content,
-            "children": [child.dict() for child in self.children]
+            "children": [child.to_dict() for child in self.children]
         }
 
     @staticmethod
