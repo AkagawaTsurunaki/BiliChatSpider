@@ -30,9 +30,9 @@ def xhs_exist(post_id: str):
 
 def __run_single_task(cls: str, post_id: str):
     logging.debug(f'📄 Task (post_id={post_id}) executing...')
-    driver = DriverInitializer.get_firefox_driver()
+    driver = DriverInitializer.get_firefox_driver(False, False)
     data: ReplyNode = XhsSingleTaskSpider(driver).collect(post_id)
-    DatasetManager().save_xhs_single_task(cls, post_id, data.dict())
+    DatasetManager().save_xhs_single_task(cls, post_id, data.to_dict())
     driver.close()
     driver.quit()
     logging.info(f'📄 Task (post_id={post_id}) completed: {len(data)} records saved.')
@@ -69,6 +69,12 @@ def __collect_by_channel_id(driver, channel_id: str):
     return post_id_set
 
 
+def collect_by_post_id(cls: str, post_id: str):
+    if xhs_exist(post_id):
+        return
+    __run_single_task(cls, post_id)
+
+
 def collect_by_channel_id(cls: str, channel_id: str, task_count: int = 3):
     driver = DriverInitializer.get_firefox_driver(stylesheet=True)
     post_id_list = []
@@ -78,5 +84,7 @@ def collect_by_channel_id(cls: str, channel_id: str, task_count: int = 3):
 
     driver.close()
     driver.quit()
+
+    post_id_list = list(set(post_id_list))
     print(f'Tasks: {len(post_id_list)}')
-    __load(cls, list(set(post_id_list)))
+    __load(cls, post_id_list)
