@@ -3,19 +3,34 @@ import logging
 import random
 import time
 
+from selenium.common import NoSuchElementException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
 
 from core.data_structure import ReplyNode
+
+
+def find_element(driver: WebDriver, by: By.ID, value: str, wait_time: float = 2, sleep_time: float = 2,
+                 suppress_exception: bool = False):
+    try:
+        elem = driver.find_element(by, value)
+        driver.implicitly_wait(wait_time)
+        time.sleep(sleep_time)
+        return elem, None
+    except NoSuchElementException as e:
+        if suppress_exception:
+            return None, e
+        raise e
 
 
 def open_json(path: str):
     try:
         with open(file=path, mode='r', encoding='utf-8') as file:
             dat = json.load(fp=file)
-
             return ReplyNode.from_dict(dat)
     except IOError:
         return None
+
 
 def open_page(driver, url: str, wait_time=5):
     # Open specified page
