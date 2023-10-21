@@ -12,7 +12,7 @@ class DriverInitializer:
 
     @staticmethod
     @retry(Exception, tries=2)
-    def get_firefox_driver(image: bool=False, stylesheet: bool=False):
+    def get_firefox_driver(image: bool = False, stylesheet: bool = False):
         # 用户数据路径
         firefox_profile_dir = cfg.firefox_profile_dir
         # 实例化火狐设置选项
