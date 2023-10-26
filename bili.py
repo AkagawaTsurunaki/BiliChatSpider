@@ -2,8 +2,8 @@ import argparse
 import logging
 import time
 import schedule
-from core.pro_spider import ProSpider
-import core.multitask_spider
+from bilibili.pro_spider import ProSpider
+import bilibili.multitask_spider
 from core.config_initializer import init_config_from_py
 
 
@@ -24,12 +24,12 @@ def run(args):
 
 def __run(args):
     if args.bv is not None and args.uid is not None and len(args.bv) != 0:
-        core.multitask_spider.run_bv_list(args.uid, args.bv)
+        bilibili.multitask_spider.run_bv_list(args.uid, args.bv)
 
     if args.list is not None and (args.list) != 0:
         for uid in args.list:
             ProSpider().update_job(uid=uid, force_create_job=args.force.lower() != 'n')
-            core.multitask_spider.run_uid_list(uid=uid)
+            bilibili.multitask_spider.run_uid_list(uid=uid)
 
 
 if __name__ == '__main__':

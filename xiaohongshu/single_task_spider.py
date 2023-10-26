@@ -111,7 +111,7 @@ class XhsSingleTaskSpider:
                 except NoSuchElementException:
                     pass
 
-                xhs_scroll(self.driver, 1, random.uniform(3, 6))
+                xhs_scroll(self.driver, 1, random.uniform(2, 3))
         except NoSuchElementException:
             pass
 
