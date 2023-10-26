@@ -100,7 +100,7 @@ The cleaned data will be written in default directory
 ## Print Statistic Result
 Use command following to print what you have collected from Bilibili.
 ```shell
-python ./bilibili_statistic.py
+python ./bili_statistic.py
 ```
 
 The output format will be as follows.
