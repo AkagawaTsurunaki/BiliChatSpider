@@ -71,15 +71,14 @@ class XhsSingleTaskSpider:
         return root
 
     @staticmethod
-    def show_more(comment_elem):
+    def __show_more(comment_elem):
         try:
             while True:
                 show_more_elem = comment_elem.find_element(By.CLASS_NAME, 'show-more')
                 if show_more_elem is None:
                     break
                 show_more_elem.click()
-                # scroll(self.driver, count=10, offset=6000)
-                time.sleep(random.uniform(2, 4))
+                time.sleep(random.uniform(1, 1.5) + 1)
         except NoSuchElementException:
             pass
 
@@ -101,7 +100,7 @@ class XhsSingleTaskSpider:
                 comment_node = ReplyNode(username, content)
                 root.add(comment_node)
 
-                self.show_more(comment_elem)
+                self.__show_more(comment_elem)
 
                 # Deep Search
 
