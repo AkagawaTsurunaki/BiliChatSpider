@@ -1,4 +1,4 @@
-python ./main.py `
+python ./bili.py `
 -f Y `
 -t now `
 -l UID_LIST
