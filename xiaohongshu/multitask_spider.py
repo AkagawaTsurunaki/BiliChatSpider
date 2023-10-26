@@ -43,7 +43,7 @@ def __load(cls: str, post_id_list: list):
 
     for post_id in post_id_list:
         pool.apply_async(func=__run_single_task, args=(cls, post_id))
-        time.sleep(3)
+        time.sleep(20)
 
     pool.close()
     pool.join()
@@ -80,6 +80,7 @@ def collect_by_channel_id(cls: str, channel_id: str, task_count: int = 3):
     post_id_list = []
     for _ in range(task_count):
         post_id_list += list(__collect_by_channel_id(driver, channel_id))
+        time.sleep(2)
         driver.refresh()
 
     driver.close()
