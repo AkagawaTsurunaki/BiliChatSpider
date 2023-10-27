@@ -78,7 +78,7 @@ def collect_by_post_id(cls: str, post_id: str):
 
 def collect_by_post_id_list(cls: str, post_id_list: list):
     post_id_list = list(set(post_id_list) - set(get_xhs_saved_post_id_list()))
-    print(f'Tasks: {len(post_id_list)}')
+    print(f'⛰️ Tasks: {len(post_id_list)}')
 
     with alive_bar(len(post_id_list)) as total_bar:
         __load(cls, post_id_list, lambda *args: total_bar())
