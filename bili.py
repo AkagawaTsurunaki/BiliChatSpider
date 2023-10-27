@@ -35,7 +35,7 @@ def __run(args):
 if __name__ == '__main__':
 
     try:
-        print('🕷️ Bili Chat Spider 🕷️')
+        print('🍺 Bili Chat Spider 🍺')
         logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
         # Initialize arguments parser.

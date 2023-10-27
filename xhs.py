@@ -1,6 +1,8 @@
 import argparse
 import logging
+import time
 
+from core.dataset_manager import DatasetManager
 from xiaohongshu import multitask_spider
 
 if __name__ == '__main__':
@@ -19,7 +21,7 @@ if __name__ == '__main__':
     channels['fitness'] = 'homefeed.fitness_v3'
 
     try:
-        print('🕷️ Xhs Chat Spider 🕷️')
+        print('🍠 Xhs Chat Spider 🍠')
         logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
         # Initialize arguments parser.
@@ -33,11 +35,23 @@ if __name__ == '__main__':
 
         args = parser.parse_args()
 
+        pre_total = DatasetManager.xhs_statistic()
+        start_time = time.time()
+
         if args.ids is not None and args.clazz is not None:
             multitask_spider.collect_by_post_id_list(args.clazz, args.ids)
 
         if args.ids is None and args.channel is not None and args.clazz is not None:
             multitask_spider.collect_by_channel_id(cls=args.clazz, channel_id=channels[args.channel], task_count=6)
+
+        end_time = time.time()
+        elapsed_time = end_time - start_time
+        cur_total = DatasetManager.xhs_statistic()
+        delta = cur_total - pre_total
+
+        logging.info(f'📊 {delta} records totally collected.')
+        logging.info(f'⌛️ {elapsed_time} seconds costed.')
+        logging.info(f'🛞 Average {delta / elapsed_time} records per second.')
 
         logging.info(f'✅ All tasks completed.')
 
