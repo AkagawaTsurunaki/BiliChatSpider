@@ -22,17 +22,20 @@ class XhsSingleTaskSpider:
     def __get_root(self):
         username_xpath = '/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[4]/div[1]/div/div[1]/a[2]/span'
         title_xpath = '//*[@id="detail-title"]'
-        detail_xpath = '/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[3]/div[2]/div[1]/div[2]/span[1]'
+        detail_xpath = '/html/body/div[1]/div[1]/div[2]/div[2]/div/div[1]/div[4]/div[2]/div[1]/div[2]/span[1]'
+
+        # detail_xpath = '//*[@id="detail-desc"]'
 
         username_elem, e = find_element(self.driver, By.XPATH, username_xpath, 2, 0, False)
         title_elem, e = find_element(self.driver, By.XPATH, title_xpath, 2, 0, False)
-        detail_elem, e = find_element(self.driver, By.XPATH, detail_xpath, 2, 0, True)
+        detail_elem, e = find_element(self.driver, By.XPATH, detail_xpath, 2, 0, False)
 
         username_txt = username_elem.text
-        content_txt = title_elem.text if title_elem is not None else '' + detail_elem.text if detail_elem is not None else ''
+        content_txt = title_elem.text if title_elem is not None else ''
+        content_txt += '\n'
+        content_txt += detail_elem.text if detail_elem is not None else ''
 
         root = ReplyNode(username_txt, content_txt)
-        print(json.dumps(root.to_dict(), ensure_ascii=False))
 
         return root
 
@@ -70,19 +73,19 @@ class XhsSingleTaskSpider:
 
         return root
 
-    @staticmethod
-    def __show_more(comment_elem):
+    def __show_more(self, comment_elem):
         try:
             while True:
                 show_more_elem = comment_elem.find_element(By.CLASS_NAME, 'show-more')
+                self.driver.implicitly_wait(2)
                 if show_more_elem is None:
                     break
                 show_more_elem.click()
-                time.sleep(random.uniform(1, 1.5) + 1)
+                time.sleep(random.uniform(0.5, 1.5))
         except NoSuchElementException:
             pass
 
-    def __collect(self, root: ReplyNode, max_post_count=20, max_response_count=100):
+    def __collect(self, root: ReplyNode, max_post_count=100, max_response_count=1000):
         try:
             # Show more comments
             for i in range(1, max_post_count):
@@ -110,7 +113,7 @@ class XhsSingleTaskSpider:
                 except NoSuchElementException:
                     pass
 
-                xhs_scroll(self.driver, 1, random.uniform(2, 3))
+                xhs_scroll(self.driver, 1, random.uniform(0.5, 1.5))
         except NoSuchElementException:
             pass
 
