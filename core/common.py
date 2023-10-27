@@ -42,6 +42,16 @@ def open_page(driver, url: str, wait_time=5):
     logging.debug(f'🌐 Successfully open the page at {url}". ')
 
 
+def is_bv_valid(bv: str) -> bool:
+    if bv == '' or bv is None:
+        return False
+    if len(bv) != 12:
+        return False
+    if bv[:2] != 'BV':
+        return False
+    return True
+
+
 def scroll(driver, offset, count=1, sleep_time=0.7):
     # Control the page to scroll
     for _ in range(count):
