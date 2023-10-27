@@ -3,6 +3,7 @@ import os
 import time
 from multiprocessing import Pool
 
+from alive_progress import alive_bar
 from selenium.webdriver.common.by import By
 
 import config.chat_spider_config as cfg
@@ -35,15 +36,15 @@ def __run_single_task(cls: str, post_id: str):
     DatasetManager().save_xhs_single_task(cls, post_id, data.to_dict())
     driver.close()
     driver.quit()
-    logging.info(f'📄 Task (post_id={post_id}) completed: {len(data)} records saved.')
+    print(f'📄 Task (post_id={post_id}) completed: {len(data)} records saved.')
 
 
-def __load(cls: str, post_id_list: list):
+def __load(cls: str, post_id_list: list, callback):
     pool = Pool(cfg.max_parallel_job_num)
 
     for post_id in post_id_list:
-        pool.apply_async(func=__run_single_task, args=(cls, post_id))
-        time.sleep(20)
+        pool.apply_async(func=__run_single_task, args=(cls, post_id), callback=callback)
+        time.sleep(8)
 
     pool.close()
     pool.join()
@@ -75,17 +76,23 @@ def collect_by_post_id(cls: str, post_id: str):
     __run_single_task(cls, post_id)
 
 
+def collect_by_post_id_list(cls: str, post_id_list: list):
+    post_id_list = list(set(post_id_list) - set(get_xhs_saved_post_id_list()))
+    print(f'Tasks: {len(post_id_list)}')
+
+    with alive_bar(len(post_id_list)) as total_bar:
+        __load(cls, post_id_list, lambda *args: total_bar())
+
+
 def collect_by_channel_id(cls: str, channel_id: str, task_count: int = 3):
     driver = DriverInitializer.get_firefox_driver(stylesheet=True)
     post_id_list = []
     for _ in range(task_count):
         post_id_list += list(__collect_by_channel_id(driver, channel_id))
-        time.sleep(2)
+        time.sleep(4)
         driver.refresh()
 
     driver.close()
     driver.quit()
 
-    post_id_list = list(set(post_id_list))
-    print(f'Tasks: {len(post_id_list)}')
-    __load(cls, post_id_list)
+    collect_by_post_id_list(cls, post_id_list)
