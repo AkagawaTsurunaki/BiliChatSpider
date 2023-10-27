@@ -83,11 +83,14 @@ class DatasetManager:
         return list(set(file_path_list))
 
     @staticmethod
-    def print_xhs_statistic():
-        print(f'Dataset (Xiaohongshu) Statistic Result')
+    def xhs_statistic():
         total = 0
         for filepath in DatasetManager.__get_xhs_saved_file_name_list():
             root = open_json(filepath)
             total += len(root)
-        print(f'Total: {total}')
         return total
+
+    @staticmethod
+    def print_xhs_statistic():
+        print(f'Dataset (Xiaohongshu) Statistic Result')
+        print(f'Total: {DatasetManager.xhs_statistic()}')
