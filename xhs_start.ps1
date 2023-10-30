@@ -1,3 +1,3 @@
-python xhs.py `
---clazz  `
+python ./xhs.py `
+--clazz `
 --ids
