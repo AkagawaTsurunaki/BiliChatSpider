@@ -27,13 +27,17 @@ class XhsSingleTaskSpider:
         # detail_xpath = '//*[@id="detail-desc"]'
 
         username_elem, e = find_element(self.driver, By.XPATH, username_xpath, 2, 0, False)
-        title_elem, e = find_element(self.driver, By.XPATH, title_xpath, 2, 0, False)
-        detail_elem, e = find_element(self.driver, By.XPATH, detail_xpath, 2, 0, False)
+        title_elem, e = find_element(self.driver, By.XPATH, title_xpath, 2, 0, True)
+        detail_elem, e = find_element(self.driver, By.XPATH, detail_xpath, 2, 0, True)
 
         username_txt = username_elem.text
-        content_txt = title_elem.text if title_elem is not None else ''
-        content_txt += '\n'
-        content_txt += detail_elem.text if detail_elem is not None else ''
+        title_elem_txt = title_elem.text if title_elem is not None else ''
+        detail_elem_txt = detail_elem.text if detail_elem is not None else ''
+
+        if len(title_elem_txt) == 0 and len(detail_elem_txt) == 0:
+            raise NoSuchElementException('Title and Detail must be non-null at least,')
+
+        content_txt = title_elem_txt + '\n' + detail_elem_txt
 
         root = ReplyNode(username_txt, content_txt)
 
