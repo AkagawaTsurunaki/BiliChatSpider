@@ -5,7 +5,7 @@ from multiprocessing import Pool
 import config.chat_spider_config as cfg
 from core.dataset_manager import DatasetManager
 from core.driver_initilizer import DriverInitializer
-from core.history_manager import HistoryManager
+from bilibili.history_manager import HistoryManager
 from bilibili.single_task_spider import SingleTaskSpider
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
