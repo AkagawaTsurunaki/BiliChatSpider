@@ -23,13 +23,22 @@ def find_element(driver: WebDriver, by: By.ID, value: str, wait_time: float = 2,
         raise e
 
 
-def open_json(path: str):
+def open_json(path: str) -> ReplyNode | None:
     try:
         with open(file=path, mode='r', encoding='utf-8') as file:
             dat = json.load(fp=file)
             return ReplyNode.from_dict(dat)
     except IOError:
         return None
+
+
+def save_json(path: str, obj) -> bool:
+    try:
+        with open(file=path, mode='w', encoding='utf-8') as file:
+            json.dump(obj=obj, fp=file, ensure_ascii=False, indent=4)
+            return True
+    except IOError:
+        return False
 
 
 def open_page(driver, url: str, wait_time=5):
