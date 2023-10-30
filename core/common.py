@@ -2,11 +2,12 @@ import json
 import logging
 import random
 import time
+from multiprocessing import Pool
 
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.firefox.webdriver import WebDriver
-
+import config.chat_spider_config as cfg
 from core.data_structure import ReplyNode
 
 
@@ -80,12 +81,20 @@ def xhs_scroll(driver: WebDriver, count=10, wait_time=1):
         driver.execute_script(js)
         time.sleep(wait_time)
 
-# def multiprocess(job_list: list, func, args: tuple | None, delay: float = 5, max_parallel_job_num: int = cfg.max_parallel_job_num):
-#     pool = Pool(cfg.max_parallel_job_num)
-#
-#     for bv in bv_list:
-#         pool.apply_async(func, args.)
-#         time.sleep(3)
-#
-#     pool.close()
-#     pool.join()
+
+def multiprocess(job_list: list,
+                 func, callback, args: tuple | None = None,
+                 delay: float = 5,
+                 max_parallel_job_num: int = cfg.max_parallel_job_num):
+    pool = Pool(max_parallel_job_num)
+
+    for job in job_list:
+        if args is None:
+
+            pool.apply_async(func=func, callback=callback)
+        else:
+            pool.apply_async(func=func, args=(job,) + args, callback=callback)
+        time.sleep(delay)
+
+    pool.close()
+    pool.join()
