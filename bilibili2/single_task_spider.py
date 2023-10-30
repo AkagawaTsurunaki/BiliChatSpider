@@ -50,9 +50,9 @@ class SingleTaskSpider:
 
     def __show_more(self, container: WebElement, sleep_time=1):
         try:
+            time.sleep(sleep_time)
             view_more_btn = container.find_element(By.CLASS_NAME, 'view-more-btn')
             self.driver.implicitly_wait(3)
-            time.sleep(sleep_time)
             self.driver.execute_script('arguments[0].click()', view_more_btn)
         except Exception:
             pass
@@ -103,7 +103,8 @@ class SingleTaskSpider:
 
                 scroll(driver=self.driver, offset=1500, count=1, sleep_time=0.7)
 
-        except NoSuchElementException:
+        except NoSuchElementException as e:
+            logging.error(e)
             pass
         self.__refactor(root)
         root = at_filter(root)
