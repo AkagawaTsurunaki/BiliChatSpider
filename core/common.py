@@ -11,7 +11,7 @@ import config.chat_spider_config as cfg
 from core.data_structure import ReplyNode
 
 
-def find_element(driver: WebDriver, by: By.ID, value: str, wait_time: float = 2, sleep_time: float = 2,
+def find_element(driver: WebDriver, by: By.ID, value: str, wait_time: float = 2, sleep_time: float = 1,
                  suppress_exception: bool = False):
     try:
         elem = driver.find_element(by, value)
@@ -42,13 +42,13 @@ def save_json(path: str, obj) -> bool:
         return False
 
 
-def open_page(driver, url: str, wait_time=5):
+def open_page(driver, url: str, wait_time=5, sleep_time=1):
     # Open specified page
     driver.get(url)
 
     # Wait for loading of resources
     driver.implicitly_wait(wait_time)
-    time.sleep(random.Random().random() * wait_time)
+    time.sleep(sleep_time)
     logging.debug(f'🌐 Successfully open the page at {url}". ')
 
 
@@ -62,7 +62,7 @@ def is_bv_valid(bv: str) -> bool:
     return True
 
 
-def scroll(driver, offset, count=1, sleep_time=0.7):
+def scroll(driver, offset=6000, count=1, sleep_time=0.7):
     # Control the page to scroll
     for _ in range(count):
         time.sleep(sleep_time)
