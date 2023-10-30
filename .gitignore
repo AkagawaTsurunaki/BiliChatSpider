@@ -1,5 +1,6 @@
 dataset
 xhs_dataset
+bili2_dataset
 *.log
 *.json
 *.zip

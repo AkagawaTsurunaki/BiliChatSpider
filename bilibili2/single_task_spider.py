@@ -1,4 +1,6 @@
 import logging
+import re
+import time
 
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -7,6 +9,7 @@ from selenium.webdriver.remote.webelement import WebElement
 
 from core.common import open_page, scroll, find_element
 from core.data_structure import ReplyNode
+from data_clean.filter.at_filter import at_filter
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -15,15 +18,16 @@ class SingleTaskSpider:
 
     def __init__(self, driver: WebDriver):
         self.driver = driver
+        self.reply_regex = re.compile('回复\s*@\s*(.*)\s*[：:]\s*(.*)')
 
     def __get_root(self):
         title_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[1]/h1'
         detail_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[1]/div[1]'
         username_elem_xpath = f'/html/body/div[2]/div[2]/div[2]/div/div[1]/div[1]/div[2]/div[1]/div/div[1]/a[1]'
 
-        title_elem = find_element(self.driver, By.XPATH, title_elem_xpath, 2, 0, False)
-        username_elem = find_element(self.driver, By.XPATH, username_elem_xpath, 2, 0, False)
-        detail_elem = find_element(self.driver, By.XPATH, detail_elem_xpath, 2, 0, True)
+        title_elem, _ = find_element(self.driver, By.XPATH, title_elem_xpath, 2, 0, False)
+        username_elem, _ = find_element(self.driver, By.XPATH, username_elem_xpath, 2, 0, False)
+        detail_elem, _ = find_element(self.driver, By.XPATH, detail_elem_xpath, 2, 0, True)
 
         assert title_elem is not None
         assert username_elem is not None
@@ -34,20 +38,23 @@ class SingleTaskSpider:
 
         return ReplyNode(content=content, username=username_elem.text)
 
-    def __show_more_next_page(self, container: WebElement):
-        try:
-            pagination_btn = container.find_element(By.CLASS_NAME, 'pagination-btn')
-            self.driver.implicitly_wait(1)
-            pagination_btn.click()
-        except NoSuchElementException:
-            pass
+    def __show_more_next_page(self, container: WebElement, sleep_time=1):
+        pagination_btns = container.find_elements(By.CLASS_NAME, 'pagination-btn')
+        self.driver.implicitly_wait(5)
+        for pagination_btn in pagination_btns:
+            if pagination_btn.text == '下一页':
+                time.sleep(sleep_time)
+                self.driver.execute_script('arguments[0].click()', pagination_btn)
+                return True
+        return False
 
-    def __show_more(self, container: WebElement):
+    def __show_more(self, container: WebElement, sleep_time=1):
         try:
             view_more_btn = container.find_element(By.CLASS_NAME, 'view-more-btn')
-            self.driver.implicitly_wait(1)
-            view_more_btn.click()
-        except NoSuchElementException:
+            self.driver.implicitly_wait(3)
+            time.sleep(sleep_time)
+            self.driver.execute_script('arguments[0].click()', view_more_btn)
+        except Exception:
             pass
 
     def __deep(self, node: ReplyNode, i, j):
@@ -57,17 +64,14 @@ class SingleTaskSpider:
         reply_elem, _ = find_element(self.driver, By.CSS_SELECTOR, reply_elem_css, 2, 0, False)
         username_elem, _ = find_element(self.driver, By.XPATH, username_elem_xpath, 2, 0, False)
 
-        assert reply_elem is not None
-        assert username_elem is not None
-
         node.add(ReplyNode(content=reply_elem.text, username=username_elem.text))
 
-    def collect(self, bv):
+    def collect(self, bv, comment_count=100, page_per_comment=50, reply_count=20):
         open_page(driver=self.driver, url=f"https://www.bilibili.com/video/{bv}")
-        scroll(driver=self.driver, offset=6000, count=10, sleep_time=0.7)
+        scroll(driver=self.driver, offset=2000, count=1, sleep_time=0.7)
         root = self.__get_root()
         try:
-            for i in range(1, 1000):
+            for i in range(1, comment_count):
                 comment_container_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[3]/div/div/div/div[2]/div[2]/div[{i}]'
                 comment_elem_css = f'div.reply-item:nth-child({i}) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > span:nth-child(1) > span:nth-child(1)'
                 username_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[3]/div/div/div/div[2]/div[2]/div[{i}]/div[2]/div[2]/div[2]/div'
@@ -82,16 +86,48 @@ class SingleTaskSpider:
 
                 node = ReplyNode(content=comment_elem.text, username=username_elem.text)
                 root.add(node)
-
-                self.__show_more(comment_container)
+                self.__show_more(comment_container, sleep_time=2)
 
                 try:
-                    self.__show_more(comment_container)
-                    for j in range(1, 50):
-                        for k in range(1, 20):
-                            self.__deep(node, i, k)
-                        self.__show_more_next_page(comment_container)
+                    # j means page
+                    for page in range(1, page_per_comment):
+                        try:
+                            for k in range(1, reply_count):
+                                self.__deep(node, i, k)
+                        except Exception:
+                            pass
+                        if not self.__show_more_next_page(comment_container):
+                            break
                 except NoSuchElementException:
                     pass
+
+                scroll(driver=self.driver, offset=1500, count=1, sleep_time=0.7)
+
         except NoSuchElementException:
             pass
+        self.__refactor(root)
+        root = at_filter(root)
+        return root
+
+    def __refactor(self, root: ReplyNode):
+        for second_child in root.children:
+            duplicate_children = second_child.children.copy()
+            second_child.children = []
+            for i, third_child in enumerate(duplicate_children):
+                result = self.reply_regex.search(third_child.content)
+                if result is None:
+                    second_child.children.append(third_child)
+                    continue
+                # reply_to = result.group(1)
+                # third_child.content = result.group(2)
+                reply_to = result.groups()[0].split(' ')[0]
+                third_child.content = result.groups()[1]
+
+                appended = False
+                for recent_child in duplicate_children[i::-1]:
+                    if recent_child.username == reply_to:
+                        recent_child.children.append(third_child)
+                        appended = True
+                        break
+                if not appended:
+                    second_child.children.append(third_child)
