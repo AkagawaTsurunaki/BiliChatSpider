@@ -30,6 +30,12 @@ def init_config_from_py():
                       f'directory.')
         raise NotADirectoryError()
 
+    xhs_save_path = cfg.xhs_save_path
+    if not os.path.exists(save_path):
+        logging.error(f'❌️ Argument "xhs_save_path" was set to "{xhs_save_path}" and it is not an accessible nor valid '
+                      f'directory.')
+        raise NotADirectoryError()
+
     firefox_profile_dir = cfg.firefox_profile_dir
     if not os.path.exists(firefox_profile_dir):
         logging.warning(
