@@ -15,7 +15,7 @@ def __run_single_task(history: HistoryManager, uid: str, bv: str):
     logging.debug(f'📄 Task (bv={bv}) executing...')
     driver = DriverInitializer.get_firefox_driver()
     data = SingleTaskSpider(driver).get_reply_records(bv)
-    DatasetManager().save_single_task(uid=uid, bv=bv, data=data)
+    DatasetManager().save_bili_single_task(uid=uid, bv=bv, data=data)
     history.single_task_completed(uid=uid, bv=bv)
     driver.close()
     driver.quit()
