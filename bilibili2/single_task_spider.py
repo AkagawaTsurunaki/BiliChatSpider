@@ -59,7 +59,7 @@ class SingleTaskSpider:
 
     def __deep(self, node: ReplyNode, i, j):
         reply_elem_css = f'div.reply-item:nth-child({i}) > div:nth-child(3) > div:nth-child(1) > div:nth-child({j}) > span:nth-child(2) > span:nth-child(1)'
-        username_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[3]/div/div/div/div[2]/div[2]/div[{i}]/div[3]/div/div[{j}]/div[1]/div[2]'
+        username_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[4]/div/div/div/div[2]/div[2]/div[{i}]/div[3]/div/div[{j}]/div[1]/div[2]'
 
         reply_elem, _ = find_element(self.driver, By.CSS_SELECTOR, reply_elem_css, 2, 0, False)
         username_elem, _ = find_element(self.driver, By.XPATH, username_elem_xpath, 2, 0, False)
@@ -69,12 +69,13 @@ class SingleTaskSpider:
     def collect(self, bv, comment_count=100, page_per_comment=50, reply_count=20):
         open_page(driver=self.driver, url=f"https://www.bilibili.com/video/{bv}")
         scroll(driver=self.driver, offset=2000, count=1, sleep_time=0.7)
+        time.sleep(3)
         root = self.__get_root()
         try:
             for i in range(1, comment_count):
-                comment_container_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[3]/div/div/div/div[2]/div[2]/div[{i}]'
+                comment_container_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[4]/div/div/div/div[2]/div[2]/div[{i}]'
                 comment_elem_css = f'div.reply-item:nth-child({i}) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > span:nth-child(1) > span:nth-child(1)'
-                username_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[3]/div/div/div/div[2]/div[2]/div[{i}]/div[2]/div[2]/div[2]/div'
+                username_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[4]/div/div/div/div[2]/div[2]/div[{i}]/div[2]/div[2]/div[2]/div'
 
                 comment_container, _ = find_element(self.driver, By.XPATH, comment_container_xpath, 2, 0, False)
                 comment_elem, _ = find_element(self.driver, By.CSS_SELECTOR, comment_elem_css, 2, 0, False)
