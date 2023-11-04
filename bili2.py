@@ -8,13 +8,12 @@ from core.config_initializer import init_config_from_py
 def run(args):
     init_config_from_py()
     logging.info('⚙️ Custom configuration loaded.')
-    print(args.bv is None)
 
     # args.uid is only used to specify folder name and up's id, without args.bv.
 
     if args.uid is not None and args.bv is None:
         for uid in args.uid:
-            upname, bv_list = multitask_spider.scan_space_by_uid(uid)
+            upname, bv_list = multitask_spider.scan_space_by_uid(uid=uid)
             logging.info(f'🪹 {upname} (uid={uid}): Scanning completed.')
             multitask_spider.collect_by_bv_list(uid, bv_list)
 
@@ -37,7 +36,7 @@ if __name__ == '__main__':
                                          epilog=''
                                          )
         parser.add_argument('-b', '--bv', nargs='+', type=str)
-        parser.add_argument('-u', '--uid', type=str)
+        parser.add_argument('-u', '--uid', nargs='+', type=str)
 
         args = parser.parse_args()
 
