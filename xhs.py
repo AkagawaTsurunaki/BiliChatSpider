@@ -42,7 +42,7 @@ if __name__ == '__main__':
             multitask_spider.collect_by_post_id_list(args.clazz, args.ids)
 
         if args.ids is None and args.channel is not None and args.clazz is not None:
-            multitask_spider.collect_by_channel_id(cls=args.clazz, channel_id=channels[args.channel], task_count=6)
+            multitask_spider.collect_by_channel_id(cls=args.clazz, channel_id=channels[args.channel], task_count=3)
 
         end_time = time.time()
         elapsed_time = end_time - start_time
