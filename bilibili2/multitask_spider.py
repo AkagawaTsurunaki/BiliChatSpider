@@ -39,8 +39,11 @@ def __load(uid: str, bv_list: list, callback):
 
 
 def collect_by_bv_list(uid: str, bv_list: List[str]):
-    with alive_bar(len(bv_list)) as total_bar:
-        __load(uid, bv_list, lambda *arg: total_bar())
+    task_list = set(bv_list) - DatasetManager().xhs_existed_bv_list()
+    print(f'{len(task_list)} Tasks')
+
+    with alive_bar(len(task_list)) as total_bar:
+        __load(uid, task_list, lambda *arg: total_bar())
 
 
 @retry(NoSuchElementException, tries=2)

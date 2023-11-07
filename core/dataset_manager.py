@@ -51,6 +51,16 @@ class DatasetManager:
     def xhs_exist(self, post_id) -> (bool, str | None):
         return self.__exists(cfg.xhs_save_path, post_id)
 
+    def xhs_existed_bv_list(self):
+        result = set()
+        for dirpath, dirnames, filenames in os.walk(cfg.save_path):
+            for filename in filenames:
+                bv = filename.split('.')[-2]
+                if bv[:2].lower() == 'bv':
+                    result.add(bv)
+        return result
+
+
     @staticmethod
     def __exists(path: str, filename: str) -> (bool, str | None):
         """
