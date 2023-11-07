@@ -21,13 +21,13 @@ class SingleTaskSpider:
         self.reply_regex = re.compile('回复\s*@\s*(.*)\s*[：:]\s*(.*)')
 
     def __get_root(self):
-        title_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[1]/h1'
-        detail_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[1]/div[1]'
-        username_elem_xpath = f'/html/body/div[2]/div[2]/div[2]/div/div[1]/div[1]/div[2]/div[1]/div/div[1]/a[1]'
+        title_elem_xpath = f'.video-title'
+        detail_elem_xpath = f'.basic-desc-info'
+        username_elem_xpath = f'html body.harmony-font.header-v3.win div#app.app-v1 div#mirror-vdcon.video-container-v1 div.right-container.is-in-large-ab div.right-container-inner.scroll-sticky div.up-panel-container div.up-info-container div.up-info--right div.up-info__detail div.up-detail div.up-detail-top a.up-name'
 
-        title_elem, _ = find_element(self.driver, By.XPATH, title_elem_xpath, 2, 0, False)
-        username_elem, _ = find_element(self.driver, By.XPATH, username_elem_xpath, 2, 0, False)
-        detail_elem, _ = find_element(self.driver, By.XPATH, detail_elem_xpath, 2, 0, True)
+        title_elem, _ = find_element(self.driver, By.CSS_SELECTOR, title_elem_xpath, 2, 0, False)
+        username_elem, _ = find_element(self.driver, By.CSS_SELECTOR, username_elem_xpath, 2, 0, False)
+        detail_elem, _ = find_element(self.driver, By.CSS_SELECTOR, detail_elem_xpath, 2, 0, True)
 
         assert title_elem is not None
         assert username_elem is not None
@@ -59,10 +59,10 @@ class SingleTaskSpider:
 
     def __deep(self, node: ReplyNode, i, j):
         reply_elem_css = f'div.reply-item:nth-child({i}) > div:nth-child(3) > div:nth-child(1) > div:nth-child({j}) > span:nth-child(2) > span:nth-child(1)'
-        username_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[4]/div/div/div/div[2]/div[2]/div[{i}]/div[3]/div/div[{j}]/div[1]/div[2]'
+        username_elem_css = f'div.reply-item:nth-child({i}) > div:nth-child(3) > div:nth-child(1) > div:nth-child({j}) > div:nth-child(1) > div:nth-child(2)'
 
         reply_elem, _ = find_element(self.driver, By.CSS_SELECTOR, reply_elem_css, 2, 0, False)
-        username_elem, _ = find_element(self.driver, By.XPATH, username_elem_xpath, 2, 0, False)
+        username_elem, _ = find_element(self.driver, By.CSS_SELECTOR, username_elem_css, 2, 0, False)
 
         node.add(ReplyNode(content=reply_elem.text, username=username_elem.text))
 
@@ -73,13 +73,14 @@ class SingleTaskSpider:
         root = self.__get_root()
         try:
             for i in range(1, comment_count):
-                comment_container_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[4]/div/div/div/div[2]/div[2]/div[{i}]'
-                comment_elem_css = f'div.reply-item:nth-child({i}) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > span:nth-child(1) > span:nth-child(1)'
-                username_elem_xpath = f'/html/body/div[2]/div[2]/div[1]/div[4]/div[4]/div/div/div/div[2]/div[2]/div[{i}]/div[2]/div[2]/div[2]/div'
 
-                comment_container, _ = find_element(self.driver, By.XPATH, comment_container_xpath, 2, 0, False)
+                comment_container_xpath = f'div.reply-item:nth-child({i})'
+                comment_elem_css = f'div.reply-item:nth-child({i}) > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > span:nth-child(1) > span:nth-child(1)'
+                username_elem_css = f'div.reply-item:nth-child({i}) > div:nth-child(2) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1)'
+
+                comment_container, _ = find_element(self.driver, By.CSS_SELECTOR, comment_container_xpath, 2, 0, False)
                 comment_elem, _ = find_element(self.driver, By.CSS_SELECTOR, comment_elem_css, 2, 0, False)
-                username_elem, _ = find_element(self.driver, By.XPATH, username_elem_xpath, 2, 0, False)
+                username_elem, _ = find_element(self.driver, By.CSS_SELECTOR, username_elem_css, 2, 0, False)
 
                 assert comment_container is not None
                 assert comment_elem is not None
@@ -120,8 +121,6 @@ class SingleTaskSpider:
                 if result is None:
                     second_child.children.append(third_child)
                     continue
-                # reply_to = result.group(1)
-                # third_child.content = result.group(2)
                 reply_to = result.groups()[0].split(' ')[0]
                 third_child.content = result.groups()[1]
 
