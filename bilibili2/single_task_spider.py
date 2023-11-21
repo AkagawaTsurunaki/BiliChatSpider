@@ -88,7 +88,7 @@ class SingleTaskSpider:
 
                 node = ReplyNode(content=comment_elem.text, username=username_elem.text)
                 root.add(node)
-                self.__show_more(comment_container, sleep_time=2)
+                self.__show_more(comment_container, sleep_time=1)
 
                 try:
                     # j means page
