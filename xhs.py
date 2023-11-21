@@ -42,18 +42,18 @@ if __name__ == '__main__':
             print('No arguments were input.')
             exit(0)
 
-        pre_total = DatasetManager.xhs_statistic()
+        pre_total, _ = DatasetManager.xhs_statistic()
         start_time = time.time()
 
         if args.ids is not None and args.clazz is not None:
             multitask_spider.collect_by_post_id_list(args.clazz, args.ids)
 
         if args.ids is None and args.channel is not None and args.clazz is not None:
-            multitask_spider.collect_by_channel_id(cls=args.clazz, channel_id=channels[args.channel], task_count=3)
+            multitask_spider.collect_by_channel_id(cls=args.clazz, channel_id=channels[args.channel], task_count=5)
 
         end_time = time.time()
         elapsed_time = end_time - start_time
-        cur_total = DatasetManager.xhs_statistic()
+        cur_total, _ = DatasetManager.xhs_statistic()
         delta = cur_total - pre_total
 
         logging.info(f'📊 {delta} records totally collected.')

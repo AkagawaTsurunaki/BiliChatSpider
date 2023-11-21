@@ -30,6 +30,20 @@ class ReplyNode:
             count += len(child)
         return count
 
+    @staticmethod
+    def leaf_nodes_count(node):
+        """
+        Suppose you call this function in certain node.
+        :return: The number of the leaf nodes from this node.
+        """
+        if not node.children:  # 如果节点没有子节点，则为末尾节点
+            return 1
+        else:
+            count = 0
+            for child in node.children:
+                count += node.leaf_nodes_count(child)
+            return count
+
     def add(self, node):
         if node is not None:
             self.children.append(node)

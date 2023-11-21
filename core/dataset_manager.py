@@ -5,6 +5,7 @@ from typing import List, Set
 
 from config import chat_spider_config as cfg
 from core.common import open_json, save_json
+from core.data_structure import ReplyNode
 
 
 class DatasetManager:
@@ -40,18 +41,22 @@ class DatasetManager:
     @staticmethod
     def xhs_statistic():
         total = 0
+        leaf_nodes_count = 0
         for filepath in DatasetManager.__load(cfg.xhs_save_path):
             root = open_json(filepath)
             total += len(root)
-        return total
+            leaf_nodes_count += ReplyNode.leaf_nodes_count(root)
+        return total, leaf_nodes_count
 
     @staticmethod
     def bili2_statistic():
         total = 0
+        leaf_nodes_count = 0
         for filepath in DatasetManager.__load(cfg.save_path):
             root = open_json(filepath)
             total += len(root)
-        return total
+            leaf_nodes_count += ReplyNode.leaf_nodes_count(root)
+        return total, leaf_nodes_count
 
     def bili_exist(self, bv) -> (bool, str | None):
         return self.__exists(cfg.save_path, bv)
@@ -67,7 +72,6 @@ class DatasetManager:
                 if bv[:2].lower() == 'bv':
                     result.add(bv)
         return result
-
 
     @staticmethod
     def __exists(path: str, filename: str) -> (bool, str | None):
