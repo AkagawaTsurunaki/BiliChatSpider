@@ -4,3 +4,4 @@ bili2_dataset
 *.log
 *.json
 *.zip
+/.vs/
