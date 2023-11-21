@@ -20,11 +20,14 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 def __run_single_task(uid: str, bv: str):
     logging.debug(f'📄 Task (bv={bv}) executing...')
     driver = DriverInitializer.get_firefox_driver()
-    data = SingleTaskSpider(driver).collect(bv)
-    DatasetManager().save_bili_single_task(uid=uid, bv=bv, data=data.to_dict())
+    try:
+        data = SingleTaskSpider(driver).collect(bv)
+        DatasetManager().save_bili_single_task(uid=uid, bv=bv, data=data.to_dict())
+        logging.info(f'📄 Task (bv={bv}) completed: {len(data)} records saved.')
+    except Exception:
+        pass
     driver.close()
     driver.quit()
-    logging.info(f'📄 Task (bv={bv}) completed: {len(data)} records saved.')
 
 
 def __load(uid: str, bv_list: list, callback):

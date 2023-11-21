@@ -106,7 +106,6 @@ class SingleTaskSpider:
                 scroll(driver=self.driver, offset=1500, count=1, sleep_time=0.7)
 
         except NoSuchElementException as e:
-            logging.error(e)
             pass
         self.__refactor(root)
         root = at_filter(root)

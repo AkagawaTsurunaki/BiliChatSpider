@@ -22,6 +22,9 @@ if __name__ == '__main__':
 
     try:
         print('🍠 Xhs Chat Spider 🍠')
+        print(f'''
+        You can choose {[v for k, v in enumerate(channels)]}
+        ''')
         logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
         # Initialize arguments parser.
@@ -34,6 +37,10 @@ if __name__ == '__main__':
         parser.add_argument('-cls', '--clazz', type=str)
 
         args = parser.parse_args()
+
+        if args.ids is None and args.channel is None and args.clazz is None:
+            print('No arguments were input.')
+            exit(0)
 
         pre_total = DatasetManager.xhs_statistic()
         start_time = time.time()
