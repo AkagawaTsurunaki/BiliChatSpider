@@ -45,6 +45,14 @@ class DatasetManager:
             total += len(root)
         return total
 
+    @staticmethod
+    def bili2_statistic():
+        total = 0
+        for filepath in DatasetManager.__load(cfg.save_path):
+            root = open_json(filepath)
+            total += len(root)
+        return total
+
     def bili_exist(self, bv) -> (bool, str | None):
         return self.__exists(cfg.save_path, bv)
 
@@ -92,6 +100,8 @@ class DatasetManager:
         result = set()
         for dirpath, dirnames, filenames in os.walk(path):
             for filename in filenames:
+                if filename == 'history.json':
+                    continue
                 result.add(os.path.join(dirpath, filename))
 
         return result
