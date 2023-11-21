@@ -64,7 +64,7 @@ this argument specifies how many processes will be started in parallel.
 For instance, you want to crawl 4 hosts, which names are `嘉然今天吃什么`, `向晚大魔王`, `乃琳Queen` and `珈乐Carol`.
 In terminal please use command like following:
 ```shell
-python ./main.py `
+python ./bili.py `
 -l 672328094 672346917 672342685 351609538`
 ```
 
@@ -82,7 +82,7 @@ If you want to crawl the videos related to specified uid.
 In terminal please use command like following:
 
 ```shell
-python ./main.py `
+python ./bili.py `
 -u 672328094 `
 -b BV14m4y1V7oj BV1Mm4y1V7R BV1Jw41117Zk
 ```
@@ -95,7 +95,7 @@ python ./main.py `
 
 You should clean data with using command following
 ```shell
-python __init__.py
+python clean.py
 ```
 Remember we set `./dataset` as default save path!
 
@@ -105,7 +105,7 @@ The cleaned data will be written in default directory
 ## Print Statistic Result
 Use command following to print what you have collected from Bilibili.
 ```shell
-python ./statistic.py
+python ./bili_statistic.py
 ```
 
 The output format will be as follows.

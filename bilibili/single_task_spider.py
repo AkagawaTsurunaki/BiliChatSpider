@@ -4,17 +4,10 @@ import time
 
 from selenium.webdriver.common.by import By
 
+from core.common import is_bv_valid
+
 
 class SingleTaskSpider:
-    @staticmethod
-    def __is_bv_valid(bv: str) -> bool:
-        if bv == '' or bv is None:
-            return False
-        if len(bv) != 12:
-            return False
-        if bv[:2] != 'BV':
-            return False
-        return True
 
     def __init__(self, driver):
         logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -29,7 +22,7 @@ class SingleTaskSpider:
         Get reply list from specified video.
         """
         # If bv is valid
-        if self.__is_bv_valid(bv):
+        if is_bv_valid(bv):
 
             # Open specified page
             url = f"https://www.bilibili.com/video/{bv}"

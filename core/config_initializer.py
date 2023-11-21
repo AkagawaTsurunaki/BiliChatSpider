@@ -6,6 +6,34 @@ from config import chat_spider_config as cfg
 logging.debug(f'permissions.default.image is set to 2, images in the website will not be loaded.')
 
 
+def select(prompt: str):
+    logging.info(prompt)
+    flag = input()
+    if flag.lower() == 'n':
+        return False
+    return True
+
+
+def xhs_init_config_from_py():
+    xhs_save_path = cfg.xhs_save_path
+    if not os.path.exists(xhs_save_path):
+        if not select(prompt=f'❓️ "{xhs_save_path}" does not exist, shall we create it for you? [y]/N'):
+            raise NotADirectoryError()
+        else:
+            os.makedirs(xhs_save_path)
+    init_config_from_py()
+
+
+def bili_init_config_from_py():
+    save_path = cfg.save_path
+    if not os.path.exists(save_path):
+        if not select(prompt=f'❓️ "{save_path}" does not exist, shall we create it for you? [y]/N'):
+            raise NotADirectoryError()
+        else:
+            os.makedirs(save_path)
+    init_config_from_py()
+
+
 def init_config_from_py():
     max_parallel_job_num = cfg.max_parallel_job_num
     if max_parallel_job_num > 36:
@@ -23,12 +51,6 @@ def init_config_from_py():
         logging.warning(
             f'⚠️ Argument "sleep_time_after_job_launching" was set to {sleep_time_after_job_launching} and self may '
             f'cause long time waiting.')
-
-    save_path = cfg.save_path
-    if not os.path.exists(save_path):
-        logging.error(f'❌️ Argument "save_path" was set to "{save_path}" and it is not an accessible nor valid '
-                      f'directory.')
-        raise NotADirectoryError()
 
     firefox_profile_dir = cfg.firefox_profile_dir
     if not os.path.exists(firefox_profile_dir):
