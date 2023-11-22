@@ -6,6 +6,7 @@ def print_xhs_statistic():
     total, leaf_nodes_count = DatasetManager.xhs_statistic()
     print(f'Total nodes: {total}')
     print(f'Leaf nodes count: {leaf_nodes_count}')
+    return total, leaf_nodes_count
 
 
 if __name__ == '__main__':
