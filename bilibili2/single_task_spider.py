@@ -1,4 +1,5 @@
 import logging
+import random
 import re
 import time
 
@@ -48,7 +49,7 @@ class SingleTaskSpider:
                 return True
         return False
 
-    def __show_more(self, container: WebElement, sleep_time=1):
+    def __show_more(self, container: WebElement, sleep_time: float = 1):
         try:
             time.sleep(sleep_time)
             view_more_btn = container.find_element(By.CLASS_NAME, 'view-more-btn')
@@ -88,7 +89,7 @@ class SingleTaskSpider:
 
                 node = ReplyNode(content=comment_elem.text, username=username_elem.text)
                 root.add(node)
-                self.__show_more(comment_container, sleep_time=1)
+                self.__show_more(comment_container, sleep_time=0.8)
 
                 try:
                     # j means page
