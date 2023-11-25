@@ -35,6 +35,7 @@ if __name__ == '__main__':
         parser.add_argument('-i', '--ids', nargs='+', type=str)
         parser.add_argument('-ch', '--channel', type=str)
         parser.add_argument('-cls', '--clazz', type=str)
+        parser.add_argument('-thr', '--threshold', type=int)
 
         args = parser.parse_args()
 

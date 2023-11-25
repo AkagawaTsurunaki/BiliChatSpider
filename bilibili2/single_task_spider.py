@@ -39,7 +39,7 @@ class SingleTaskSpider:
 
         return ReplyNode(content=content, username=username_elem.text)
 
-    def __show_more_next_page(self, container: WebElement, sleep_time=1):
+    def __show_more_next_page(self, container: WebElement, sleep_time=0.7):
         pagination_btns = container.find_elements(By.CLASS_NAME, 'pagination-btn')
         self.driver.implicitly_wait(5)
         for pagination_btn in pagination_btns:
@@ -49,7 +49,7 @@ class SingleTaskSpider:
                 return True
         return False
 
-    def __show_more(self, container: WebElement, sleep_time: float = 1):
+    def __show_more(self, container: WebElement, sleep_time: float = 0.7):
         try:
             time.sleep(sleep_time)
             view_more_btn = container.find_element(By.CLASS_NAME, 'view-more-btn')
@@ -89,7 +89,7 @@ class SingleTaskSpider:
 
                 node = ReplyNode(content=comment_elem.text, username=username_elem.text)
                 root.add(node)
-                self.__show_more(comment_container, sleep_time=0.8)
+                self.__show_more(comment_container, sleep_time=0.6)
 
                 try:
                     # j means page
