@@ -124,7 +124,7 @@ class XhsSingleTaskSpider:
         return root
 
     def collect(self, post_id: str):
-        open_page(self.driver, f'https://www.xiaohongshu.com/explore/{post_id}')
+        open_page(self.driver, f'https://www.xiaohongshu.com/explore/{post_id}', sleep_time=3)
 
         # Start collect
         logging.debug(f'🗨️ Collecting replies from the page. ')
