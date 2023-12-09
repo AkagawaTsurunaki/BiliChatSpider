@@ -1,14 +1,11 @@
-firefox_profile_dir = r""
-firefox_driver_dir = r""
+firefox_profile_dir = r"C:\Users\96514\AppData\Roaming\Mozilla\Firefox\Profiles\m5xs216e.default-release"
+firefox_driver_dir = r"C:\Program Files\Mozilla Firefox\geckodriver.exe"
 
-# Bilibili Save Path
-save_path = r""
+save_path = r"D:\AkagawaTsurunaki\WorkSpace\PycharmProjects\BiliChatSpider\bili2_dataset"
 
-# Xiaohongshu Save Path
-xhs_save_path = r""
+xhs_save_path = r"D:\AkagawaTsurunaki\WorkSpace\PycharmProjects\BiliChatSpider\xhs_dataset"
 
 sleep_time_before_job_launching = 4
 sleep_time_after_job_launching = 4
 
-# The number of process
-max_parallel_job_num = 18
+max_parallel_job_num = 10
