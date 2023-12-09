@@ -35,7 +35,8 @@ if __name__ == '__main__':
         parser.add_argument('-i', '--ids', nargs='+', type=str)
         parser.add_argument('-ch', '--channel', type=str)
         parser.add_argument('-cls', '--clazz', type=str)
-        parser.add_argument('-thr', '--threshold', type=int)
+        parser.add_argument('-thr', '--threshold', type=int, default=50)
+        parser.add_argument('-tc', '--taskcount', type=int, default=8)
 
         args = parser.parse_args()
 
@@ -50,7 +51,7 @@ if __name__ == '__main__':
             multitask_spider.collect_by_post_id_list(args.clazz, args.ids)
 
         if args.ids is None and args.channel is not None and args.clazz is not None:
-            multitask_spider.collect_by_channel_id(cls=args.clazz, channel_id=channels[args.channel], task_count=8)
+            multitask_spider.collect_by_channel_id(cls=args.clazz, channel_id=channels[args.channel], task_count=args.taskcount, thr=args.threshold)
 
         end_time = time.time()
         elapsed_time = end_time - start_time

@@ -1,5 +1,4 @@
 import logging
-import random
 import re
 import time
 
@@ -39,7 +38,7 @@ class SingleTaskSpider:
 
         return ReplyNode(content=content, username=username_elem.text)
 
-    def __show_more_next_page(self, container: WebElement, sleep_time=0.7):
+    def __show_more_next_page(self, container: WebElement, sleep_time=0.5):
         pagination_btns = container.find_elements(By.CLASS_NAME, 'pagination-btn')
         self.driver.implicitly_wait(5)
         for pagination_btn in pagination_btns:
@@ -49,7 +48,7 @@ class SingleTaskSpider:
                 return True
         return False
 
-    def __show_more(self, container: WebElement, sleep_time: float = 0.7):
+    def __show_more(self, container: WebElement, sleep_time: float = 0.5):
         try:
             time.sleep(sleep_time)
             view_more_btn = container.find_element(By.CLASS_NAME, 'view-more-btn')
@@ -89,7 +88,7 @@ class SingleTaskSpider:
 
                 node = ReplyNode(content=comment_elem.text, username=username_elem.text)
                 root.add(node)
-                self.__show_more(comment_container, sleep_time=0.6)
+                self.__show_more(comment_container, sleep_time=0.5)
 
                 try:
                     # j means page
@@ -104,7 +103,7 @@ class SingleTaskSpider:
                 except NoSuchElementException:
                     pass
 
-                scroll(driver=self.driver, offset=1500, count=1, sleep_time=0.7)
+                scroll(driver=self.driver, offset=1500, count=1, sleep_time=0.5)
 
         except NoSuchElementException as e:
             pass

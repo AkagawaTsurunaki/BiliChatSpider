@@ -58,18 +58,19 @@ def __collect_by_channel_id(driver, channel_id: str, thr: int = 1000):
     scroll(driver, 3000, 4, 1)
 
     try:
-        for i in range(1, 40):
+        for i in range(1, 30):
             post_id_xpath = f'/html/body/div[1]/div[1]/div[2]/div[2]/div/div[3]/section[{i}]/div/a[1]'
             like_count_xpath = f'/html/body/div[1]/div[1]/div[2]/div[2]/div/div[3]/section[{i}]/div/div/div/span/span[2]'
             post_id_elem, _ = find_element(driver, By.XPATH, post_id_xpath, wait_time=2, sleep_time=0,
                                            suppress_exception=False)
             like_count_elem, _ = find_element(driver, By.XPATH, like_count_xpath, wait_time=2, sleep_time=0,
                                               suppress_exception=True)
-            like = __convert_str_to_num(like_count_elem.text)
-            # If like count is less than the threshold given by user,
-            # then we just skip this post for performance
-            if like < thr:
-                continue
+            if like_count_elem is not None:
+                like = __convert_str_to_num(like_count_elem.text)
+                # If like count is less than the threshold given by user,
+                # then we just skip this post for performance
+                if like < thr:
+                    continue
             post_id_set.append(post_id_elem.get_attribute('href').split('/')[-1])
     except Exception:
         pass
@@ -113,4 +114,5 @@ def collect_by_channel_id(cls: str, channel_id: str, task_count: int = 3, thr: i
     driver.close()
     driver.quit()
 
+    post_id_list = list(set(post_id_list))
     collect_by_post_id_list(cls, post_id_list)
